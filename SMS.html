@@ -1,0 +1,2745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATME College of Engineering, Mysuru — Student Certificate Request & Verification Portal</title>
+  <!-- Google Fonts: Inter, Playfair Display, Cinzel & Merriweather -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            display: ['Cinzel', 'Georgia', 'serif'],
+            merri: ['Merriweather', 'Georgia', 'serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#0F2744',
+              navyLight: '#1E40AF',
+              navyDark: '#09182e',
+              gold: '#C89B3C',
+              goldLight: '#e4c364',
+              goldBg: '#fbf7eb',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @keyframes fadeUp {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .animate-fade-up { animation: fadeUp 0.24s ease-out forwards; }
+    .animate-slide-in { animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Print Styles: Only output the official certificate sheet cleanly */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printable-certificate-area,
+      #printable-certificate-area * {
+        visibility: visible !important;
+      }
+      #printable-certificate-area {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- ==================== STICKY HEADER & NAVIGATION ==================== -->
+  <header class="sticky top-0 z-40 bg-brand-navy text-white shadow-lg border-b border-brand-gold/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-18 gap-3">
+        <!-- Dynamic Institution Logo & Name -->
+        <div class="flex items-center gap-3 cursor-pointer min-w-0" onclick="switchTab('overview')">
+          <div id="header-crest-container" class="w-10 h-10 rounded-xl bg-white/10 border border-brand-gold/50 flex items-center justify-center text-brand-goldLight shadow-inner shrink-0 overflow-hidden"></div>
+          <div class="leading-tight min-w-0">
+            <span id="header-inst-name" class="font-bold text-white text-sm sm:text-base tracking-tight block truncate">ATME College of Engineering</span>
+            <p class="text-[11px] text-slate-300 truncate hidden sm:block">Mysuru &bull; Official Student Certificate Request &amp; Verification Portal</p>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden lg:flex items-center gap-1 bg-brand-navyDark/70 p-1 rounded-xl border border-white/10" aria-label="Primary Navigation">
+          <button onclick="switchTab('overview')" data-tab="overview" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Overview
+          </button>
+          <button onclick="switchTab('apply')" data-tab="apply" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Apply for Certificate
+          </button>
+          <button onclick="switchTab('track')" data-tab="track" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            Track Progress
+          </button>
+          <button onclick="switchTab('admin')" data-tab="admin" class="nav-tab px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+            <span id="nav-admin-icon-desktop"></span>
+            <span>Admin Portal</span>
+            <span id="admin-flag-badge-desktop" class="hidden inline-flex items-center justify-center min-w-[18px] h-4 px-1 text-[10px] font-bold rounded-full bg-rose-600 text-white">0</span>
+          </button>
+        </nav>
+
+        <!-- Right Side: Admin Auth Status / CTA -->
+        <div class="flex items-center gap-2 shrink-0">
+          <div id="header-admin-pill" class="hidden items-center gap-2">
+            <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-gold/20 border border-brand-gold/40 text-brand-goldLight text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Registrar Active
+            </span>
+            <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-lg bg-rose-600/90 hover:bg-rose-600 text-white text-xs font-semibold transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              Logout
+            </button>
+          </div>
+          <button id="header-apply-cta" onclick="switchTab('apply')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-gold hover:bg-amber-600 text-brand-navyDark text-xs font-bold shadow-sm transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            New Request
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Horizontal Tab Strip -->
+      <div class="flex lg:hidden items-center gap-1.5 pb-2.5 overflow-x-auto no-scrollbar">
+        <button onclick="switchTab('overview')" data-tab="overview" class="nav-tab shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold transition">Overview</button>
+        <button onclick="switchTab('apply')" data-tab="apply" class="nav-tab shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold transition">Apply for Certificate</button>
+        <button onclick="switchTab('track')" data-tab="track" class="nav-tab shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold transition">Track Progress</button>
+        <button onclick="switchTab('admin')" data-tab="admin" class="nav-tab shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+          <span id="nav-admin-icon-mobile"></span>
+          Admin Portal
+          <span id="admin-flag-badge-mobile" class="hidden inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-rose-600 text-white">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ================================================================ -->
+    <!-- TAB 1: OVERVIEW & CERTIFICATE CATALOG                            -->
+    <!-- ================================================================ -->
+    <section id="tab-overview" class="tab-section space-y-8 animate-fade-up">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-navyDark via-brand-navy to-brand-navyLight text-white p-6 sm:p-10 shadow-xl border border-brand-gold/25">
+        <div class="absolute right-0 top-0 -mt-12 -mr-12 w-72 h-72 rounded-full bg-brand-gold/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute left-1/3 bottom-0 -mb-20 w-64 h-64 rounded-full bg-emerald-400/10 blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-brand-gold/30 text-brand-goldLight text-xs font-semibold mb-4">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Automated Digital Certificate Mail &amp; Registrar Verification
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Institutional Student Certificate Request & Tracking Portal
+          </h1>
+          <p class="mt-3 text-slate-200 text-sm sm:text-base leading-relaxed max-w-2xl">
+            Submit official applications for Bonafide, Study, Character, Transfer, and Fee Structure certificates. Monitor every approval stage in real time and receive digitally signed QR-verified certificates directly by email.
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <button onclick="switchTab('apply')" class="px-5 py-3 rounded-xl bg-brand-gold hover:bg-amber-600 text-brand-navyDark font-bold text-sm shadow-lg transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              Apply for Certificate
+            </button>
+            <button onclick="switchTab('track')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-sm transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              Track Progress
+            </button>
+            <button onclick="switchTab('admin')" class="px-4 py-3 rounded-xl bg-transparent hover:bg-white/10 text-slate-200 border border-white/15 font-semibold text-sm transition flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              Admin Portal
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live KPI Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Requests</span>
+            <div class="w-9 h-9 rounded-xl bg-brand-navy/10 text-brand-navy flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+          </div>
+          <p id="kpi-total" class="mt-3 text-3xl font-extrabold text-brand-navy">0</p>
+          <p class="mt-1 text-xs text-slate-500">All student applications</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Approved &amp; Mailed</span>
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p id="kpi-approved" class="mt-3 text-3xl font-extrabold text-emerald-600">0</p>
+          <p class="mt-1 text-xs text-slate-500">Signed PDFs dispatched</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Urgent Requests</span>
+            <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+          </div>
+          <p id="kpi-urgent" class="mt-3 text-3xl font-extrabold text-rose-600">0</p>
+          <p class="mt-1 text-xs text-slate-500">Priority 24-hour processing</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Under Verification</span>
+            <div class="w-9 h-9 rounded-xl bg-brand-goldBg text-brand-gold flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p id="kpi-under-verification" class="mt-3 text-3xl font-extrabold text-amber-600">0</p>
+          <p class="mt-1 text-xs text-slate-500">Active Registrar review</p>
+        </div>
+      </div>
+
+      <!-- Interactive Certificate Catalog -->
+      <div>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+          <div>
+            <h2 class="text-xl font-extrabold text-brand-navy">Certificate Catalog</h2>
+            <p class="text-sm text-slate-500">Select any certificate type below to start your request immediately.</p>
+          </div>
+          <span class="text-xs font-semibold text-brand-navy bg-brand-goldBg border border-brand-gold/35 px-3 py-1 rounded-full self-start sm:self-auto">QR Verified & Officially Signed</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div onclick="selectFromCatalog('Bonafide Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-brand-navy/10 text-brand-navy group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Most Requested</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Bonafide Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Certifies current enrollment for scholarships, passport applications, bus passes, and bank accounts.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 24 hrs</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="selectFromCatalog('Study Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-700 group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Academic</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Study Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Official proof of academic years studied at the institution for CET/NEET counselling and state portals.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 24–48 hrs</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="selectFromCatalog('Character / Conduct Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-violet-50 text-violet-700 group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Conduct</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Character / Conduct Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Attests good moral character and disciplinary standing required for higher studies or employment.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 48 hrs</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="selectFromCatalog('Transfer Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">Clearance</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Transfer Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Issued upon course completion or institution transfer after library and accounts no-dues clearance.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 2–3 days</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="selectFromCatalog('Fee Structure Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Accounts</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Fee Structure Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Detailed tuition, hostel, and examination fee breakdown for bank education loans & reimbursements.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 24–48 hrs</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="selectFromCatalog('Custom Certificate')" class="group cursor-pointer bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-gold hover:shadow-lg transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="w-11 h-11 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-brand-navy group-hover:text-brand-goldLight transition flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Bespoke</span>
+              </div>
+              <h3 class="text-base font-bold text-brand-navy group-hover:text-brand-gold transition">Custom Certificate</h3>
+              <p class="mt-1.5 text-sm text-slate-500 leading-relaxed">Medium of Instruction, Migration, Internship NOC, Attendance, or bespoke registrar attestations.</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brand-navy">
+              <span>Turnaround: 2–3 days</span>
+              <span class="text-brand-gold group-hover:translate-x-1 transition-transform">Apply Now &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 2: STUDENT APPLICATION FORM & CERTIFICATE MAIL               -->
+    <!-- ================================================================ -->
+    <section id="tab-apply" class="tab-section hidden animate-fade-up">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-6">
+          <h1 class="text-2xl font-extrabold text-brand-navy">Apply for Certificate</h1>
+          <p class="text-sm text-slate-500 mt-1">Fill in all required student details accurately, upload your ID/receipt, and submit your request.</p>
+        </div>
+
+        <form id="apply-form" onsubmit="handleApplicationSubmit(event)" class="space-y-6">
+          <!-- Section 1: Complete Student & Certificate Info -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-brand-navy text-brand-goldLight text-xs font-bold flex items-center justify-center">1</span>
+              <h2 class="text-base font-bold text-brand-navy">Student Particulars & Certificate Request</h2>
+            </div>
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Student Full Name <span class="text-rose-500">*</span></label>
+                <input type="text" id="f-name" required placeholder="e.g., Prajwal Gowda M" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">VTU USN / Roll Number <span class="text-rose-500">*</span></label>
+                <input type="text" id="f-roll" required placeholder="e.g., 4AD23CS042" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm uppercase focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Father's / Guardian's Name <span class="text-rose-500">*</span></label>
+                <input type="text" id="f-father" required placeholder="e.g., Ramesh Gowda" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Mother's Name <span class="text-rose-500">*</span></label>
+                <input type="text" id="f-mother" required placeholder="e.g., Kavitha Ramesh" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Date of Birth <span class="text-rose-500">*</span></label>
+                <input type="date" id="f-dob" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Academic Year <span class="text-rose-500">*</span></label>
+                <select id="f-year" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-brand-navy outline-none">
+                  <option value="2026-27" selected>2026–27</option>
+                  <option value="2025-26">2025–26</option>
+                  <option value="2024-25">2024–25</option>
+                  <option value="2023-24">2023–24</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Course / Branch / Department <span class="text-rose-500">*</span></label>
+                <select id="f-course" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-brand-navy outline-none transition">
+                  <option value="B.E. Computer Science &amp; Engineering">B.E. Computer Science &amp; Engineering</option>
+                  <option value="B.E. CSE (Artificial Intelligence &amp; Machine Learning)">B.E. CSE (Artificial Intelligence &amp; Machine Learning)</option>
+                  <option value="B.E. CSE (Data Science)">B.E. CSE (Data Science)</option>
+                  <option value="B.E. CSE (Cyber Security)">B.E. CSE (Cyber Security)</option>
+                  <option value="B.E. Computer Science &amp; Design">B.E. Computer Science &amp; Design</option>
+                  <option value="B.E. Electronics &amp; Communication Engineering">B.E. Electronics &amp; Communication Engineering</option>
+                  <option value="B.E. Electrical &amp; Electronics Engineering">B.E. Electrical &amp; Electronics Engineering</option>
+                  <option value="B.E. Mechanical Engineering">B.E. Mechanical Engineering</option>
+                  <option value="B.E. Civil Engineering">B.E. Civil Engineering</option>
+                  <option value="MCA (Master of Computer Applications)">MCA (Master of Computer Applications)</option>
+                  <option value="MBA (Master of Business Administration)">MBA (Master of Business Administration)</option>
+                  <option value="BCA (Bachelor of Computer Applications)">BCA (Bachelor of Computer Applications)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Certificate Type <span class="text-rose-500">*</span></label>
+                <select id="f-cert-type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-brand-navy outline-none">
+                  <option value="Bonafide Certificate">Bonafide Certificate</option>
+                  <option value="Study Certificate">Study Certificate</option>
+                  <option value="Character / Conduct Certificate">Character / Conduct Certificate</option>
+                  <option value="Transfer Certificate">Transfer Certificate</option>
+                  <option value="Fee Structure Certificate">Fee Structure Certificate</option>
+                  <option value="Custom Certificate">Custom Certificate</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Urgency</label>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="urgency" value="Standard" checked class="peer sr-only" />
+                    <div class="px-3 py-2.5 rounded-xl border border-slate-300 text-center text-xs font-semibold text-slate-700 peer-checked:border-brand-navy peer-checked:bg-brand-navy/5 peer-checked:text-brand-navy transition">
+                      Standard (2–3 Days)
+                    </div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="urgency" value="Urgent" class="peer sr-only" />
+                    <div class="px-3 py-2.5 rounded-xl border border-slate-300 text-center text-xs font-semibold text-slate-700 peer-checked:border-brand-gold peer-checked:bg-brand-goldBg peer-checked:text-brand-navy transition">
+                      Urgent (24 Hours)
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Purpose of Certificate <span class="text-rose-500">*</span></label>
+                <input type="text" id="f-purpose" required placeholder="e.g., National Scholarship Portal (NSP) / Education Loan / Passport Application" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+              </div>
+
+              <!-- Supporting ID / Receipt Upload -->
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Supporting ID Card / Fee Receipt Upload</label>
+                <div class="border-2 border-dashed border-slate-300 hover:border-brand-gold rounded-2xl p-4 bg-slate-50/70 transition">
+                  <input type="file" id="f-id-file" accept="image/*,.pdf" onchange="handleIdUpload(event)" class="hidden" />
+                  <div id="id-upload-empty" class="text-center py-2">
+                    <svg class="w-8 h-8 mx-auto text-slate-400 mb-1.5" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    <p class="text-xs sm:text-sm text-slate-600">
+                      <button type="button" onclick="document.getElementById('f-id-file').click()" class="text-brand-navy font-bold underline hover:text-brand-gold">Choose File</button> (PNG, JPG, or PDF)
+                    </p>
+                  </div>
+                  <div id="id-upload-preview" class="hidden flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <img id="id-preview-thumb" src="" alt="ID Preview" class="hidden w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0" />
+                      <div id="id-preview-icon" class="w-12 h-12 rounded-lg bg-brand-navy/10 text-brand-navy flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      </div>
+                      <div class="min-w-0">
+                        <p id="id-file-name" class="text-sm font-bold text-slate-900 truncate"></p>
+                        <p id="id-file-meta" class="text-xs text-emerald-600 font-medium"></p>
+                      </div>
+                    </div>
+                    <button type="button" onclick="clearIdUpload()" class="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Contact Details & Digital Certificate Mail -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-brand-navy text-brand-goldLight text-xs font-bold flex items-center justify-center">2</span>
+                <h2 class="text-base font-bold text-brand-navy">Contact Details &amp; Digital Certificate Mail</h2>
+              </div>
+              <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-brand-goldBg text-brand-navy border border-brand-gold/35">Digital Delivery</span>
+            </div>
+
+            <div class="p-6 space-y-5">
+              <!-- Email & Mobile Number -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Student Email Address <span class="text-rose-500">*</span></label>
+                  <input type="email" id="f-email" required placeholder="e.g., student@atme.edu.in" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none transition" />
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">10-Digit Mobile Number (+91) <span class="text-rose-500">*</span></label>
+                  <div class="flex rounded-xl border border-slate-300 overflow-hidden focus-within:ring-2 focus-within:ring-brand-navy bg-white">
+                    <span class="px-3.5 py-2.5 bg-slate-100 text-slate-700 text-sm font-bold border-r border-slate-300 flex items-center">+91</span>
+                    <input type="tel" id="f-mobile" required maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number" class="w-full px-3.5 py-2.5 text-sm outline-none" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Digital Certificate Mail Toggle -->
+              <div class="p-4 rounded-xl bg-brand-goldBg/80 border border-brand-gold/30 flex items-start justify-between gap-3">
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-brand-navy" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span class="text-xs font-bold text-brand-navy">Send Digital Certificate Mail</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mt-1">Automatically email the digitally signed, QR-verified PDF certificate to your email address upon Registrar approval.</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0 mt-0.5">
+                  <input type="checkbox" id="f-cert-mail" checked class="sr-only peer" />
+                  <div class="w-10 h-6 bg-slate-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-navy"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Submit Footer -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+            <p class="text-xs text-slate-500">All requests are timestamped and audited by the Office of the Registrar.</p>
+            <button type="submit" id="btn-submit-verified" class="px-6 py-3 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-sm font-bold shadow-md transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Submit Certificate Request
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 3: TRACK PROGRESS, CERTIFICATE MAIL & PRINTABLE PREVIEW      -->
+    <!-- ================================================================ -->
+    <section id="tab-track" class="tab-section hidden space-y-6 animate-fade-up">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-brand-navy">Track Certificate Progress</h1>
+            <p class="text-sm text-slate-500 mt-0.5">Search by Application ID (e.g., CERT-2026-1001), VTU USN (e.g., 4AD23CS042), or 10-digit Mobile Number.</p>
+          </div>
+          <div class="flex gap-2 w-full md:w-auto md:min-w-[380px]">
+            <div class="relative flex-1">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="track-search" oninput="renderTrackSection()" placeholder="Enter Application ID, USN, or Mobile..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none" />
+            </div>
+            <button onclick="document.getElementById('track-search').value=''; renderTrackSection();" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">Clear</button>
+          </div>
+        </div>
+        <!-- Recent Submitted IDs Quick List -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+          <span class="text-xs font-semibold text-slate-500">Recent Applications:</span>
+          <div id="track-quick-chips" class="flex flex-wrap gap-1.5"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-4 space-y-2.5">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 px-1">Matching Applications (<span id="track-match-count">0</span>)</h2>
+          <div id="track-list" class="space-y-2.5 max-h-[680px] overflow-y-auto pr-1"></div>
+        </div>
+        <div id="track-detail" class="lg:col-span-8"></div>
+      </div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!-- TAB 4: AUTHENTICATED ADMIN PORTAL (ZERO CREDENTIALS SHOWN ON UI) -->
+    <!-- ================================================================ -->
+    <section id="tab-admin" class="tab-section hidden animate-fade-up">
+
+      <!-- 4A. CLEAN, MINIMAL ADMIN LOGIN FORM (NO CREDENTIALS / HINTS SHOWN) -->
+      <div id="admin-login-view" class="max-w-md mx-auto my-8 sm:my-12">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+          <div class="bg-brand-navy px-6 py-7 text-center text-white border-b-4 border-brand-gold">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-white/10 border border-brand-gold/50 flex items-center justify-center text-brand-goldLight mb-3">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+            <h1 class="text-xl font-extrabold">Admin Portal Sign In</h1>
+            <p class="text-xs text-slate-300 mt-1">Authorized Registrar & Institutional Administrators Only</p>
+          </div>
+
+          <form onsubmit="handleAdminLogin(event)" class="p-6 sm:p-7 space-y-5">
+            <div id="admin-login-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700"></div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Username</label>
+              <input type="text" id="login-username" required autocomplete="username" placeholder="Enter admin username" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+              <div class="relative">
+                <input type="password" id="login-password" required autocomplete="current-password" placeholder="Enter admin password" class="w-full pl-3.5 pr-11 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-navy outline-none" />
+                <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-navy p-1" aria-label="Show or hide password">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-sm font-bold shadow-md transition">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 4B. AUTHENTICATED ADMIN WORKSPACE (4 SUB-TABS) -->
+      <div id="admin-dashboard-view" class="hidden space-y-6">
+        <div class="bg-brand-navy rounded-2xl p-5 sm:p-6 text-white shadow-md flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b-4 border-brand-gold">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-gold/20 text-brand-goldLight text-[11px] font-bold mb-1.5">Authenticated Registrar Console</span>
+            <h1 class="text-xl sm:text-2xl font-extrabold">Admin Portal</h1>
+          </div>
+          <div class="flex flex-wrap gap-1.5 bg-brand-navyDark/70 p-1.5 rounded-xl border border-white/10">
+            <button onclick="switchAdminSubTab('review')" data-admintab="review" class="admin-subtab px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+              Applications & Review Desk
+            </button>
+            <button onclick="switchAdminSubTab('editor')" data-admintab="editor" class="admin-subtab px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+              Certificate Details Editor
+            </button>
+            <button onclick="switchAdminSubTab('design')" data-admintab="design" class="admin-subtab px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+              Certificate Design Studio
+            </button>
+            <button onclick="switchAdminSubTab('security')" data-admintab="security" class="admin-subtab px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+              Mail &amp; Security Settings
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-TAB A: APPLICATIONS & REVIEW DESK -->
+        <div id="admin-subtab-review" class="admin-subtab-panel space-y-5">
+          <!-- Admin KPI Summary -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+              <span class="text-[11px] font-bold uppercase text-slate-500">All Applications</span>
+              <p id="akpi-total" class="text-2xl font-extrabold text-brand-navy mt-1">0</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-amber-200 bg-amber-50/30 shadow-sm">
+              <span class="text-[11px] font-bold uppercase text-amber-700">Under Review</span>
+              <p id="akpi-pending" class="text-2xl font-extrabold text-amber-700 mt-1">0</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-rose-200 bg-rose-50/30 shadow-sm">
+              <span class="text-[11px] font-bold uppercase text-rose-600">Urgent Pending</span>
+              <p id="akpi-urgent" class="text-2xl font-extrabold text-rose-600 mt-1">0</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-emerald-200 bg-emerald-50/30 shadow-sm">
+              <span class="text-[11px] font-bold uppercase text-emerald-700">Approved & Mailed</span>
+              <p id="akpi-approved" class="text-2xl font-extrabold text-emerald-700 mt-1">0</p>
+            </div>
+          </div>
+
+          <!-- Filters & Search -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-sm">
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="setAdminFilter('ALL')" data-af="ALL" class="af-btn px-3 py-2 rounded-xl text-xs font-bold transition">All</button>
+              <button onclick="setAdminFilter('PENDING')" data-af="PENDING" class="af-btn px-3 py-2 rounded-xl text-xs font-bold transition">Under Review</button>
+              <button onclick="setAdminFilter('APPROVED')" data-af="APPROVED" class="af-btn px-3 py-2 rounded-xl text-xs font-bold transition">Approved</button>
+              <button onclick="setAdminFilter('REJECTED')" data-af="REJECTED" class="af-btn px-3 py-2 rounded-xl text-xs font-bold transition">Rejected</button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <select id="admin-type-filter" onchange="renderAdminReviewTable()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none">
+                <option value="ALL">All Certificate Types</option>
+                <option value="Bonafide Certificate">Bonafide Certificate</option>
+                <option value="Study Certificate">Study Certificate</option>
+                <option value="Character / Conduct Certificate">Character / Conduct Certificate</option>
+                <option value="Transfer Certificate">Transfer Certificate</option>
+                <option value="Fee Structure Certificate">Fee Structure Certificate</option>
+                <option value="Custom Certificate">Custom Certificate</option>
+              </select>
+              <input type="text" id="admin-search" oninput="renderAdminReviewTable()" placeholder="Search ID, student, roll..." class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-navy outline-none sm:w-56" />
+            </div>
+          </div>
+
+          <!-- Applications Table -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th class="px-4 py-3.5">Application & Ref</th>
+                    <th class="px-4 py-3.5">Student & Roll</th>
+                    <th class="px-4 py-3.5">Certificate & Urgency</th>
+                    <th class="px-4 py-3.5">Uploaded ID / Image</th>
+                    <th class="px-4 py-3.5">Status</th>
+                    <th class="px-4 py-3.5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-review-tbody" class="divide-y divide-slate-100 text-xs"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB B: FULL CERTIFICATE DETAILS EDITOR (PER-STUDENT LIVE WORKSPACE) -->
+        <div id="admin-subtab-editor" class="admin-subtab-panel hidden space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-base font-extrabold text-brand-navy">Full Certificate Details Editor</h2>
+              <p class="text-xs text-slate-500">Modify every field on an individual student's certificate with real-time live preview.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold text-slate-600 shrink-0">Editing Application:</label>
+              <select id="editor-app-selector" onchange="loadCertificateEditor(this.value)" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-brand-navy bg-slate-50 outline-none"></select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+            <!-- Left: All Per-Certificate Editable Fields -->
+            <div class="xl:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="p-5 space-y-4 max-h-[760px] overflow-y-auto">
+                <!-- Student Uploaded Image / Document Preview -->
+                <div id="ce-upload-box" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200"></div>
+
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Certificate Metadata</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Certificate Reference Number</label>
+                    <input type="text" id="ce-ref-no" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Issue Date</label>
+                    <input type="date" id="ce-issue-date" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Certificate Type</label>
+                    <input type="text" id="ce-cert-type" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Verification Serial ID</label>
+                    <input type="text" id="ce-serial-id" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                </div>
+
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold pt-3 border-t border-slate-200">Student Particulars</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Student Full Name</label>
+                    <input type="text" id="ce-name" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Roll / Register Number</label>
+                    <input type="text" id="ce-roll" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs uppercase outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Father's / Guardian's Name</label>
+                    <input type="text" id="ce-father" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Mother's Name</label>
+                    <input type="text" id="ce-mother" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Date of Birth</label>
+                    <input type="date" id="ce-dob" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Academic Year</label>
+                    <input type="text" id="ce-year" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Course / Class / Branch</label>
+                    <input type="text" id="ce-course" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Conduct / Character Grade</label>
+                    <input type="text" id="ce-conduct" oninput="onCertEditorInput()" placeholder="e.g., Good / Exemplary" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Purpose / Reason</label>
+                    <input type="text" id="ce-purpose" oninput="onCertEditorInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                </div>
+
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold pt-3 border-t border-slate-200">Body Text & Footnote</h3>
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-[11px] font-semibold text-slate-700">Full Certificate Description (Written on White Blank Paper)</label>
+                    <button type="button" onclick="resetEditorBodyToTemplate()" class="text-[11px] font-bold text-brand-navy hover:text-brand-gold underline">Reset to Template</button>
+                  </div>
+                  <textarea id="ce-body" rows="6" oninput="onCertEditorInput()" placeholder="Write the complete certificate description here. Press Enter twice for new paragraphs..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs leading-relaxed outline-none focus:ring-2 focus:ring-brand-navy"></textarea>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Additional Remarks / Footnote</label>
+                  <input type="text" id="ce-footnote" oninput="onCertEditorInput()" placeholder="Optional institutional footnote..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                </div>
+
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold pt-3 border-t border-slate-200">Officer Signatory Overrides &amp; Signature Images</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Primary Officer Name</label>
+                    <input type="text" id="ce-sig1-name" oninput="onCertEditorInput()" placeholder="Leave blank for global default" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Primary Officer Designation</label>
+                    <input type="text" id="ce-sig1-title" oninput="onCertEditorInput()" placeholder="Leave blank for global default" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div class="sm:col-span-2 p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <img id="ce-sig1-preview" src="" alt="Primary Officer Signature" class="hidden h-9 max-w-[110px] object-contain bg-white border border-slate-200 rounded px-1.5 py-0.5 mix-blend-multiply" />
+                      <span id="ce-sig1-status" class="text-[11px] text-slate-500">Using global primary officer signature</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <input type="file" id="ce-sig1-file" accept="image/*" onchange="handleCertSigUpload(1, event)" class="hidden" />
+                      <button type="button" onclick="document.getElementById('ce-sig1-file').click()" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-brand-navy text-[11px] font-bold text-brand-navy transition">Upload Signature</button>
+                      <button type="button" id="ce-sig1-clear" onclick="clearCertSigUpload(1)" class="hidden text-[11px] font-semibold text-rose-600 hover:underline">Clear</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Co-Signatory Officer Name</label>
+                    <input type="text" id="ce-sig2-name" oninput="onCertEditorInput()" placeholder="Leave blank for global default" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Co-Signatory Designation</label>
+                    <input type="text" id="ce-sig2-title" oninput="onCertEditorInput()" placeholder="Leave blank for global default" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div class="sm:col-span-2 p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <img id="ce-sig2-preview" src="" alt="Co-Signatory Signature" class="hidden h-9 max-w-[110px] object-contain bg-white border border-slate-200 rounded px-1.5 py-0.5 mix-blend-multiply" />
+                      <span id="ce-sig2-status" class="text-[11px] text-slate-500">Using global co-signatory signature</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <input type="file" id="ce-sig2-file" accept="image/*" onchange="handleCertSigUpload(2, event)" class="hidden" />
+                      <button type="button" onclick="document.getElementById('ce-sig2-file').click()" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-brand-navy text-[11px] font-bold text-brand-navy transition">Upload Signature</button>
+                      <button type="button" id="ce-sig2-clear" onclick="clearCertSigUpload(2)" class="hidden text-[11px] font-semibold text-rose-600 hover:underline">Clear</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5">
+                <button type="button" onclick="saveCertificateEdits(false)" class="flex-1 py-2.5 px-3 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold shadow-sm transition">
+                  Save Certificate Changes
+                </button>
+                <button type="button" onclick="saveCertificateEdits(true)" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                  Save, Approve & Send Mail
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Side-by-Side Live Preview -->
+            <div class="xl:col-span-7 space-y-2.5">
+              <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Live Certificate Preview (Updates on Every Keystroke)</span>
+                <button type="button" onclick="openCertModal(editingAppId)" class="text-xs font-bold text-brand-navy hover:text-brand-gold underline">Open Print View</button>
+              </div>
+              <div class="bg-slate-200/80 p-4 sm:p-6 rounded-2xl border border-slate-300 shadow-inner">
+                <div id="cert-editor-live-preview"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB C: CERTIFICATE DESIGN STUDIO (GLOBAL INSTITUTION BRANDING) -->
+        <div id="admin-subtab-design" class="admin-subtab-panel hidden">
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+            <div class="xl:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                  <h2 class="text-base font-extrabold text-brand-navy">Certificate Design Studio</h2>
+                  <p class="text-xs text-slate-500">Global institutional branding, borders, signatories & default templates.</p>
+                </div>
+                <button type="button" onclick="resetDesignDefaults()" class="text-xs font-bold text-rose-600 hover:underline">Reset</button>
+              </div>
+
+              <div class="p-5 space-y-4 max-h-[750px] overflow-y-auto">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Institution Identity</h3>
+                <div class="space-y-3">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Institution Name</label>
+                    <input type="text" id="d-inst-name" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Subtitle</label>
+                    <input type="text" id="d-subtitle" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Affiliation / Reg No.</label>
+                    <input type="text" id="d-affiliation" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Address</label>
+                    <input type="text" id="d-address" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Contact Info (Phone / Website / Email)</label>
+                    <input type="text" id="d-contact" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                </div>
+
+                <!-- Logo & Crest -->
+                <div class="space-y-2 pt-3 border-t border-slate-200">
+                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Logo / Crest Icon</h3>
+                  <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="selectPresetIcon('grad')" data-icon="grad" class="preset-icon-btn px-3 py-1.5 rounded-xl border text-xs font-semibold transition">Academic Cap</button>
+                    <button type="button" onclick="selectPresetIcon('shield')" data-icon="shield" class="preset-icon-btn px-3 py-1.5 rounded-xl border text-xs font-semibold transition">Royal Shield</button>
+                    <button type="button" onclick="selectPresetIcon('book')" data-icon="book" class="preset-icon-btn px-3 py-1.5 rounded-xl border text-xs font-semibold transition">Open Book</button>
+                    <button type="button" onclick="selectPresetIcon('laurel')" data-icon="laurel" class="preset-icon-btn px-3 py-1.5 rounded-xl border text-xs font-semibold transition">Crest Star</button>
+                  </div>
+                  <div class="flex items-center gap-2 pt-1">
+                    <input type="file" id="d-logo-file" accept="image/*" onchange="handleLogoUpload(event)" class="hidden" />
+                    <button type="button" onclick="document.getElementById('d-logo-file').click()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-brand-navy text-xs font-bold transition">Upload Custom Logo</button>
+                    <button type="button" id="btn-clear-logo" onclick="clearCustomLogo()" class="hidden text-xs font-semibold text-rose-600 hover:underline">Remove</button>
+                  </div>
+                </div>
+
+                <!-- Border, Colors & Font -->
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-200">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Paper &amp; Border Style</label>
+                    <select id="d-border" onchange="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none">
+                      <option value="blank">Plain White Blank Paper</option>
+                      <option value="classic">Classic Gold Double</option>
+                      <option value="royal">Royal Navy Frame</option>
+                      <option value="minimal">Minimal Modern</option>
+                      <option value="guilloche">Heritage Guilloché</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Font Style</label>
+                    <select id="d-font" onchange="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none">
+                      <option value="serif">Classic Serif</option>
+                      <option value="display">Formal Display</option>
+                      <option value="sans">Modern Sans</option>
+                    </select>
+                  </div>
+                  <div class="col-span-2 p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+                    <div>
+                      <span class="text-xs font-bold text-brand-navy block">White Blank Paper Mode</span>
+                      <span class="text-[10px] text-slate-500">Write all description cleanly on plain white paper without boxed tables.</span>
+                    </div>
+                    <input type="checkbox" id="d-blank-paper" onchange="onDesignInput()" class="w-4 h-4 rounded accent-brand-navy cursor-pointer" />
+                  </div>
+                  <label class="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold">
+                    Primary Color
+                    <input type="color" id="d-primary" oninput="onDesignInput()" class="w-8 h-6 rounded cursor-pointer border-0 bg-transparent" />
+                  </label>
+                  <label class="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold">
+                    Accent Color
+                    <input type="color" id="d-accent" oninput="onDesignInput()" class="w-8 h-6 rounded cursor-pointer border-0 bg-transparent" />
+                  </label>
+                </div>
+
+                <!-- Watermark & Seal -->
+                <div class="space-y-2.5 pt-3 border-t border-slate-200">
+                  <div class="flex items-center justify-between">
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Watermark & Seal</label>
+                    <label class="inline-flex items-center gap-1.5 text-xs font-semibold cursor-pointer">
+                      <input type="checkbox" id="d-watermark-on" onchange="onDesignInput()" class="rounded" />
+                      Show Watermark
+                    </label>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="d-watermark-text" oninput="onDesignInput()" placeholder="Watermark Text" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                    <input type="text" id="d-seal-text" oninput="onDesignInput()" placeholder="Official Seal Text" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                </div>
+
+                <!-- Primary & Secondary Signatories + Officer Signature Images -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                  <div>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Officer Signatories &amp; Signature Images</h3>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Upload a PNG/JPG of the officer's signature (even on white paper — background blends automatically).</p>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="d-sig1-name" oninput="onDesignInput()" placeholder="Primary Officer Name" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                    <input type="text" id="d-sig1-title" oninput="onDesignInput()" placeholder="Primary Designation" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <img id="d-sig1-preview" src="" alt="Primary Officer Signature" class="hidden h-10 max-w-[120px] object-contain bg-white border border-slate-200 rounded px-1.5 py-0.5 mix-blend-multiply" />
+                      <span id="d-sig1-status" class="text-[11px] text-slate-500">No primary officer signature uploaded</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <input type="file" id="d-sig1-file" accept="image/*" onchange="handleDesignSigUpload(1, event)" class="hidden" />
+                      <button type="button" onclick="document.getElementById('d-sig1-file').click()" class="px-3 py-1.5 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-[11px] font-bold transition">Upload Signature</button>
+                      <button type="button" id="d-sig1-clear" onclick="clearDesignSigUpload(1)" class="hidden text-[11px] font-semibold text-rose-600 hover:underline">Remove</button>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-3 pt-1">
+                    <input type="text" id="d-sig2-name" oninput="onDesignInput()" placeholder="Secondary Officer Name" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                    <input type="text" id="d-sig2-title" oninput="onDesignInput()" placeholder="Secondary Designation" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none" />
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                      <img id="d-sig2-preview" src="" alt="Secondary Officer Signature" class="hidden h-10 max-w-[120px] object-contain bg-white border border-slate-200 rounded px-1.5 py-0.5 mix-blend-multiply" />
+                      <span id="d-sig2-status" class="text-[11px] text-slate-500">No secondary officer signature uploaded</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <input type="file" id="d-sig2-file" accept="image/*" onchange="handleDesignSigUpload(2, event)" class="hidden" />
+                      <button type="button" onclick="document.getElementById('d-sig2-file').click()" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-brand-navy text-[11px] font-bold transition">Upload Signature</button>
+                      <button type="button" id="d-sig2-clear" onclick="clearDesignSigUpload(2)" class="hidden text-[11px] font-semibold text-rose-600 hover:underline">Remove</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Default Body Template -->
+                <div class="space-y-2 pt-3 border-t border-slate-200">
+                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-gold">Default Certificate Body Template</h3>
+                  <textarea id="d-body-template" rows="4" oninput="onDesignInput()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs leading-relaxed outline-none"></textarea>
+                  <p class="text-[11px] text-slate-500">
+                    Tokens: <code>{{studentName}}</code>, <code>{{fatherName}}</code>, <code>{{motherName}}</code>, <code>{{dob}}</code>, <code>{{rollNo}}</code>, <code>{{course}}</code>, <code>{{academicYear}}</code>, <code>{{certType}}</code>, <code>{{conduct}}</code>, <code>{{purpose}}</code>
+                  </p>
+                </div>
+              </div>
+
+              <div class="p-4 bg-slate-50 border-t border-slate-200">
+                <button type="button" onclick="saveDesignConfig()" class="w-full py-2.5 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold shadow-sm transition">
+                  Save & Apply Global Design
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Design Preview -->
+            <div class="xl:col-span-7 space-y-2.5">
+              <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Live Global Design Preview</span>
+                <span class="text-xs font-semibold text-emerald-700">Synced with Header & All Certificates</span>
+              </div>
+              <div class="bg-slate-200/80 p-4 sm:p-6 rounded-2xl border border-slate-300 shadow-inner">
+                <div id="design-live-preview"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB D: MAIL & SECURITY SETTINGS -->
+        <div id="admin-subtab-security" class="admin-subtab-panel hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Certificate Mail Configuration -->
+            <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+                <h2 class="text-base font-extrabold text-brand-navy">Digital Certificate Mail Settings</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Configure the official sender email used when dispatching approved certificates.</p>
+              </div>
+              <form onsubmit="saveMailConfig(event)" class="p-6 space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Official Certificate Mail Sender Address <span class="text-rose-500">*</span></label>
+                  <input type="email" id="cfg-mail-sender" required placeholder="certificates@atme.edu.in" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-brand-navy outline-none focus:ring-2 focus:ring-brand-navy" />
+                  <p class="text-[11px] text-slate-500 mt-1.5">Shown in the "From" header of every student's Digital Certificate Mail dispatch.</p>
+                </div>
+                <div class="flex justify-end pt-2">
+                  <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold shadow-sm transition">
+                    Save Mail Settings
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Admin Credentials Management -->
+            <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+                <h2 class="text-base font-extrabold text-brand-navy">Admin Security Settings</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Update Admin Username &amp; Password (stored securely as SHA-256 hashes).</p>
+              </div>
+              <form onsubmit="updateAdminCredentials(event)" class="p-6 space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Current Password <span class="text-rose-500">*</span></label>
+                  <input type="password" id="sec-current-pw" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">New Admin Username (optional)</label>
+                  <input type="text" id="sec-new-user" placeholder="Leave blank to keep current username" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">New Password (min 8 chars) <span class="text-rose-500">*</span></label>
+                  <input type="password" id="sec-new-pw" required minlength="8" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Confirm New Password <span class="text-rose-500">*</span></label>
+                  <input type="password" id="sec-confirm-pw" required minlength="8" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none" />
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold shadow-sm transition">
+                  Update Admin Credentials
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-slate-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <p>&copy; 2026 <span id="footer-inst-name">ATME College of Engineering</span>, Mysuru &mdash; Office of the Registrar.</p>
+      <p>Digital Certificate Request &amp; Verification System</p>
+    </div>
+  </footer>
+
+  <!-- ==================== TOAST CONTAINER ==================== -->
+  <div id="toast-container" class="fixed top-20 right-5 z-50 space-y-2.5 pointer-events-none max-w-sm w-[90vw]"></div>
+
+  <!-- ==================== MODAL 1: QUICK ACTION / REJECT REMARKS ==================== -->
+  <div id="action-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-fade-up">
+      <div class="px-6 py-4 bg-brand-navy text-white flex items-center justify-between">
+        <span id="action-modal-title" class="font-bold text-sm">Registrar Action</span>
+        <button onclick="closeModal('action-modal')" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="action-modal-body" class="p-6 space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: CERTIFICATE MAIL VIEWER ==================== -->
+  <div id="mail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-up">
+      <div class="px-6 py-4 bg-brand-navy text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-goldLight" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span class="font-bold text-sm">Digital Certificate Mail — Official Dispatch</span>
+        </div>
+        <button onclick="closeModal('mail-modal')" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="mail-modal-body" class="p-6 overflow-y-auto space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: FORMAL CERTIFICATE PREVIEW / PRINT ==================== -->
+  <div id="cert-modal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-fade-up">
+      <div class="px-5 py-3.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+        <span class="font-bold text-sm text-brand-navy flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Official Digital Certificate
+        </span>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            Print / Save as PDF
+          </button>
+          <button onclick="closeModal('cert-modal')" class="p-2 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-200 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 sm:p-8 overflow-y-auto bg-slate-200/70">
+        <div id="printable-certificate-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 4: STUDENT UPLOADED IMAGE VIEWER ==================== -->
+  <div id="upload-viewer-modal" class="hidden fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-up">
+      <div class="px-6 py-4 bg-brand-navy text-white flex items-center justify-between">
+        <div class="flex items-center gap-2 min-w-0">
+          <svg class="w-5 h-5 text-brand-goldLight shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span id="upload-viewer-title" class="font-bold text-sm truncate">Uploaded Student Document</span>
+        </div>
+        <button onclick="closeModal('upload-viewer-modal')" class="text-slate-300 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="upload-viewer-body" class="p-6 overflow-y-auto space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION SCRIPT ==================== -->
+  <script>
+    // =========================================================================
+    // STORAGE KEYS & ATME COLLEGE OF ENGINEERING DEFAULTS
+    // =========================================================================
+    const KEYS = {
+      APPS: 'atme_educert_v4_applications',
+      DESIGN: 'atme_educert_v4_design',
+      MAIL_CFG: 'atme_educert_v4_mail_config',
+      ADMIN_HASHES: 'atme_educert_v4_admin_hashes'
+    };
+
+    const DEFAULT_DESIGN = {
+      instName: 'ATME College of Engineering',
+      subtitle: 'Affiliated to Visvesvaraya Technological University (VTU), Belagavi | Approved by AICTE | Accredited by NAAC & NBA',
+      affiliation: 'CET Code: E205 | COMED-K Code: E152 | VTU Affiliated Institution',
+      address: '13th Kilometer, Mysore – Kanakapura – Bangalore Road, Mysuru – 570 028, Karnataka',
+      contact: 'Phone: 0821-2954081 / 0821-2954011 | Email: principal@atme.edu.in | Web: atme.edu.in | CET: E205 | COMED-K: E152',
+      presetIcon: 'grad',
+      customLogoDataUrl: '',
+      borderStyle: 'blank', // blank | classic | royal | minimal | guilloche
+      blankPaperMode: true,
+      primaryColor: '#0F2744',
+      accentColor: '#C89B3C',
+      fontStyle: 'serif', // serif | display | sans
+      watermarkEnabled: false,
+      watermarkText: 'ATME COLLEGE OF ENGINEERING',
+      sealText: 'ATME COLLEGE OF ENGINEERING • MYSURU',
+      sig1Name: 'Principal, ATME College of Engineering',
+      sig1Title: 'Principal / Issuing Officer',
+      sig1ImageDataUrl: '',
+      sig2Name: 'Registrar / Academic Section',
+      sig2Title: 'Registrar / Verifying Officer',
+      sig2ImageDataUrl: '',
+      bodyTemplate: 'This is to certify that {{studentName}}, Son/Daughter of Sri {{fatherName}} and Smt {{motherName}}, born on {{dob}}, bearing VTU USN / Roll Number {{rollNo}}, is a bonafide student of this institution pursuing {{course}} during the academic year {{academicYear}}.\n\nAs per our institutional records, his/her conduct and character during the period of study at ATME College of Engineering, Mysuru have been {{conduct}}.\n\nThis {{certType}} is issued upon the student\'s request strictly for the purpose of {{purpose}}.'
+    };
+
+    const DEFAULT_MAIL_CONFIG = {
+      senderEmail: 'certificates@atme.edu.in'
+    };
+
+    // =========================================================================
+    // RUNTIME STATE
+    // =========================================================================
+    let applications = [];
+    let designConfig = { ...DEFAULT_DESIGN };
+    let draftDesign = { ...DEFAULT_DESIGN };
+    let mailConfig = { ...DEFAULT_MAIL_CONFIG };
+    let adminHashes = { userHash: '', passHash: '' };
+    let isAdminAuthenticated = false;
+    let activeTab = 'overview';
+    let activeAdminSubTab = 'review';
+    let adminFilter = 'ALL';
+    let selectedTrackId = null;
+    let editingAppId = null;
+    let draftCertEdits = null;
+    let uploadedIdAttachment = null;
+
+    // =========================================================================
+    // CRYPTO & SECURITY HELPERS (SHA-256 WITH FALLBACK)
+    // =========================================================================
+    async function sha256Hex(text) {
+      try {
+        if (window.crypto && window.crypto.subtle) {
+          const data = new TextEncoder().encode(text);
+          const hashBuf = await window.crypto.subtle.digest('SHA-256', data);
+          return Array.from(new Uint8Array(hashBuf))
+            .map((b) => b.toString(16).padStart(2, '0'))
+            .join('');
+        }
+      } catch (e) {
+        // Fallback below for non-secure contexts
+      }
+      let h1 = 0xdeadbeef ^ text.length;
+      let h2 = 0x41c6ce57 ^ text.length;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+    }
+
+    async function initAdminHashes() {
+      const saved = safeJsonLoad(KEYS.ADMIN_HASHES, null);
+      if (saved && saved.userHash && saved.passHash) {
+        adminHashes = saved;
+      } else {
+        adminHashes = {
+          userHash: await sha256Hex('registrar_head'),
+          passHash: await sha256Hex('CertPortal#2026!')
+        };
+        safeJsonSave(KEYS.ADMIN_HASHES, adminHashes);
+      }
+    }
+
+    // =========================================================================
+    // STORAGE & UTILITY HELPERS
+    // =========================================================================
+    function safeJsonLoad(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function safeJsonSave(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        console.warn('Storage write skipped:', e);
+      }
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function todayIso() {
+      const d = new Date();
+      return d.toISOString().split('T')[0];
+    }
+
+    function nowTimestamp() {
+      return new Date().toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function formatDisplayDate(iso) {
+      if (!iso) return '—';
+      const parts = String(iso).split('-');
+      if (parts.length !== 3) return escapeHtml(iso);
+      const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      if (isNaN(d.getTime())) return escapeHtml(iso);
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const palette =
+        type === 'success' ? 'bg-emerald-600 text-white border-emerald-500' :
+        type === 'error' ? 'bg-rose-600 text-white border-rose-500' :
+        type === 'warning' ? 'bg-amber-600 text-white border-amber-500' :
+        'bg-brand-navy text-white border-brand-gold/40';
+
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-lg text-xs font-semibold flex items-center justify-between gap-3 animate-slide-in ${palette}`;
+      el.innerHTML = `<span>${escapeHtml(message)}</span>`;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 3600);
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function getDefaultSeedApplications() {
+      return [
+        {
+          id: 'CERT-2026-1001',
+          refNo: 'ATME/REG/2026/1001',
+          serialId: 'ATME-QR-88412',
+          issueDate: todayIso(),
+          studentName: 'Prajwal Gowda M',
+          rollNo: '4AD23CS042',
+          fatherName: 'Ramesh Gowda',
+          motherName: 'Kavitha Ramesh',
+          dob: '2005-04-14',
+          course: 'B.E. Computer Science & Engineering',
+          academicYear: '2026-27',
+          certType: 'Bonafide Certificate',
+          urgency: 'Standard',
+          purpose: 'National Scholarship Portal (NSP) Renewal',
+          conduct: 'Good and Exemplary',
+          email: 'prajwal.4ad23cs042@atme.edu.in',
+          mobile: '9845012345',
+          sendCertMail: true,
+          attachmentName: 'Student_ID_4AD23CS042.png',
+          attachmentDataUrl: 'https://placehold.co/640x380/0F2744/C89B3C?text=ATME+Student+ID+Card+%E2%80%A2+4AD23CS042',
+          attachmentMimeType: 'image/png',
+          customBody: '',
+          footnote: 'Verified by Office of the Registrar, ATME College of Engineering, Mysuru.',
+          sig1NameOverride: '',
+          sig1TitleOverride: '',
+          sig1ImageOverride: '',
+          sig2NameOverride: '',
+          sig2TitleOverride: '',
+          sig2ImageOverride: '',
+          stage: 4,
+          status: 'APPROVED',
+          remarks: 'Verified against VTU enrollment register and dispatched via Digital Certificate Mail.',
+          submittedAt: '17 Nov 2026, 10:15 AM',
+          mailSentAt: '17 Nov 2026, 02:40 PM',
+          history: [
+            { title: 'Application Submitted', time: '17 Nov 2026, 10:15 AM', note: 'Submitted online by student.' },
+            { title: 'Under Admin Review', time: '17 Nov 2026, 11:05 AM', note: 'Assigned to Academic Section.' },
+            { title: 'Approved & Signed', time: '17 Nov 2026, 02:35 PM', note: 'Digitally signed by Principal & Registrar.' },
+            { title: 'Certificate Mail Sent', time: '17 Nov 2026, 02:40 PM', note: 'PDF mailed to prajwal.4ad23cs042@atme.edu.in.' }
+          ]
+        },
+        {
+          id: 'CERT-2026-1002',
+          refNo: 'ATME/REG/2026/1002',
+          serialId: 'ATME-QR-88419',
+          issueDate: todayIso(),
+          studentName: 'Ananya Sharma K',
+          rollNo: '4AD22EC019',
+          fatherName: 'Suresh Sharma',
+          motherName: 'Meenakshi S',
+          dob: '2004-09-22',
+          course: 'B.E. Electronics & Communication Engineering',
+          academicYear: '2026-27',
+          certType: 'Study Certificate',
+          urgency: 'Urgent',
+          purpose: 'SBI Education Loan Verification',
+          conduct: 'Good',
+          email: 'ananya.4ad22ec019@atme.edu.in',
+          mobile: '9880154321',
+          sendCertMail: true,
+          attachmentName: 'Fee_Receipt_2026.jpg',
+          attachmentDataUrl: 'https://placehold.co/640x380/1E40AF/FFFFFF?text=ATME+Fee+Receipt+2026+%E2%80%A2+4AD22EC019',
+          attachmentMimeType: 'image/jpeg',
+          customBody: '',
+          footnote: '',
+          sig1NameOverride: '',
+          sig1TitleOverride: '',
+          sig1ImageOverride: '',
+          sig2NameOverride: '',
+          sig2TitleOverride: '',
+          sig2ImageOverride: '',
+          stage: 2,
+          status: 'PENDING',
+          remarks: '',
+          submittedAt: '18 Nov 2026, 09:30 AM',
+          mailSentAt: '',
+          history: [
+            { title: 'Application Submitted', time: '18 Nov 2026, 09:30 AM', note: 'Marked Urgent (24-Hour Priority).' },
+            { title: 'Under Admin Review', time: '18 Nov 2026, 09:45 AM', note: 'Awaiting Registrar verification.' }
+          ]
+        },
+        {
+          id: 'CERT-2026-1003',
+          refNo: 'ATME/REG/2026/1003',
+          serialId: 'ATME-QR-88425',
+          issueDate: todayIso(),
+          studentName: 'Rohan Deshpande',
+          rollNo: '4AD24AI011',
+          fatherName: 'Prakash Deshpande',
+          motherName: 'Sunita Deshpande',
+          dob: '2006-01-08',
+          course: 'B.E. CSE (Artificial Intelligence & Machine Learning)',
+          academicYear: '2026-27',
+          certType: 'Character / Conduct Certificate',
+          urgency: 'Standard',
+          purpose: 'Passport & Internship Background Verification',
+          conduct: 'Exemplary',
+          email: 'rohan.4ad24ai011@atme.edu.in',
+          mobile: '9901234567',
+          sendCertMail: true,
+          attachmentName: 'College_ID_Front.png',
+          attachmentDataUrl: 'https://placehold.co/640x380/09182e/e4c364?text=ATME+College+ID+Front+%E2%80%A2+4AD24AI011',
+          attachmentMimeType: 'image/png',
+          customBody: '',
+          footnote: '',
+          sig1NameOverride: '',
+          sig1TitleOverride: '',
+          sig1ImageOverride: '',
+          sig2NameOverride: '',
+          sig2TitleOverride: '',
+          sig2ImageOverride: '',
+          stage: 2,
+          status: 'PENDING',
+          remarks: '',
+          submittedAt: '19 Nov 2026, 11:10 AM',
+          mailSentAt: '',
+          history: [
+            { title: 'Application Submitted', time: '19 Nov 2026, 11:10 AM', note: 'Submitted online by student.' },
+            { title: 'Under Admin Review', time: '19 Nov 2026, 11:15 AM', note: 'Queued at Office of the Registrar.' }
+          ]
+        }
+      ];
+    }
+
+    function loadAllState() {
+      const savedApps = safeJsonLoad(KEYS.APPS, null);
+      applications = Array.isArray(savedApps) && savedApps.length ? savedApps : getDefaultSeedApplications();
+      safeJsonSave(KEYS.APPS, applications);
+
+      const savedDesign = safeJsonLoad(KEYS.DESIGN, null);
+      designConfig = savedDesign ? { ...DEFAULT_DESIGN, ...savedDesign } : { ...DEFAULT_DESIGN };
+      draftDesign = { ...designConfig };
+
+      const savedMail = safeJsonLoad(KEYS.MAIL_CFG, null);
+      mailConfig = savedMail ? { ...DEFAULT_MAIL_CONFIG, ...savedMail } : { ...DEFAULT_MAIL_CONFIG };
+
+      if (!selectedTrackId && applications.length) {
+        selectedTrackId = applications[0].id;
+      }
+      if (!editingAppId && applications.length) {
+        editingAppId = applications[0].id;
+      }
+    }
+
+    function persistApplications() {
+      safeJsonSave(KEYS.APPS, applications);
+    }
+
+    // =========================================================================
+    // INSTITUTION CREST ICONS & BRAND SYNC
+    // =========================================================================
+    function getPresetIconSvg(icon, sizeClass = 'w-6 h-6') {
+      if (icon === 'shield') {
+        return `<svg class="${sizeClass}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"/></svg>`;
+      }
+      if (icon === 'book') {
+        return `<svg class="${sizeClass}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`;
+      }
+      if (icon === 'laurel') {
+        return `<svg class="${sizeClass}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>`;
+      }
+      return `<svg class="${sizeClass}" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>`;
+    }
+
+    function applyInstitutionBranding() {
+      const name = designConfig.instName || DEFAULT_DESIGN.instName;
+      const headerName = document.getElementById('header-inst-name');
+      const footerName = document.getElementById('footer-inst-name');
+      const crest = document.getElementById('header-crest-container');
+      if (headerName) headerName.textContent = name;
+      if (footerName) footerName.textContent = name;
+      if (crest) {
+        crest.innerHTML = designConfig.customLogoDataUrl
+          ? `<img src="${designConfig.customLogoDataUrl}" alt="Logo" class="w-full h-full object-contain bg-white p-0.5" />`
+          : getPresetIconSvg(designConfig.presetIcon, 'w-5 h-5');
+      }
+    }
+
+    // =========================================================================
+    // NAVIGATION & KPI COUNTERS
+    // =========================================================================
+    function switchTab(tab) {
+      activeTab = tab;
+      document.querySelectorAll('.tab-section').forEach((sec) => {
+        sec.classList.toggle('hidden', sec.id !== `tab-${tab}`);
+      });
+      document.querySelectorAll('.nav-tab').forEach((btn) => {
+        const isActive = btn.dataset.tab === tab;
+        btn.classList.toggle('bg-brand-gold', isActive);
+        btn.classList.toggle('text-brand-navyDark', isActive);
+        btn.classList.toggle('text-slate-200', !isActive);
+        btn.classList.toggle('hover:bg-white/10', !isActive);
+      });
+
+      if (tab === 'track') renderTrackSection();
+      if (tab === 'admin') renderAdminSection();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectFromCatalog(certType) {
+      const sel = document.getElementById('f-cert-type');
+      if (sel) sel.value = certType;
+      switchTab('apply');
+      showToast(`Selected ${certType}. Fill in your details below.`, 'info');
+    }
+
+    function updateKpis() {
+      const total = applications.length;
+      const approved = applications.filter((a) => a.status === 'APPROVED').length;
+      const urgent = applications.filter((a) => a.urgency === 'Urgent' && a.status === 'PENDING').length;
+      const pending = applications.filter((a) => a.status === 'PENDING').length;
+
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = String(val);
+      };
+
+      setTxt('kpi-total', total);
+      setTxt('kpi-approved', approved);
+      setTxt('kpi-urgent', urgent);
+      setTxt('kpi-under-verification', pending);
+
+      setTxt('akpi-total', total);
+      setTxt('akpi-pending', pending);
+      setTxt('akpi-urgent', urgent);
+      setTxt('akpi-approved', approved);
+
+      ['admin-flag-badge-desktop', 'admin-flag-badge-mobile'].forEach((id) => {
+        const badge = document.getElementById(id);
+        if (!badge) return;
+        badge.textContent = String(pending);
+        badge.classList.toggle('hidden', pending === 0);
+      });
+    }
+
+    function updateAdminNavIndicators() {
+      const lockSvg = isAdminAuthenticated
+        ? `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>`
+        : `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`;
+
+      const dIcon = document.getElementById('nav-admin-icon-desktop');
+      const mIcon = document.getElementById('nav-admin-icon-mobile');
+      if (dIcon) dIcon.innerHTML = lockSvg;
+      if (mIcon) mIcon.innerHTML = lockSvg;
+
+      const pill = document.getElementById('header-admin-pill');
+      const cta = document.getElementById('header-apply-cta');
+      if (pill) {
+        pill.classList.toggle('hidden', !isAdminAuthenticated);
+        pill.classList.toggle('flex', isAdminAuthenticated);
+      }
+      if (cta) {
+        cta.classList.toggle('hidden', isAdminAuthenticated);
+      }
+    }
+
+    // =========================================================================
+    // TAB 2: STUDENT APPLICATION FORM & UPLOAD
+    // =========================================================================
+    function handleIdUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      uploadedIdAttachment = {
+        name: file.name,
+        sizeKb: Math.max(1, Math.round(file.size / 1024)),
+        mimeType: file.type || '',
+        dataUrl: ''
+      };
+
+      document.getElementById('id-upload-empty').classList.add('hidden');
+      document.getElementById('id-upload-preview').classList.remove('hidden');
+      document.getElementById('id-file-name').textContent = file.name;
+      document.getElementById('id-file-meta').textContent = `${uploadedIdAttachment.sizeKb} KB • Ready to attach`;
+
+      const thumb = document.getElementById('id-preview-thumb');
+      const icon = document.getElementById('id-preview-icon');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (uploadedIdAttachment) {
+          uploadedIdAttachment.dataUrl = e.target.result;
+        }
+        if (file.type.startsWith('image/')) {
+          thumb.src = e.target.result;
+          thumb.classList.remove('hidden');
+          icon.classList.add('hidden');
+        } else {
+          thumb.classList.add('hidden');
+          icon.classList.remove('hidden');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearIdUpload() {
+      uploadedIdAttachment = null;
+      const input = document.getElementById('f-id-file');
+      if (input) input.value = '';
+      document.getElementById('id-upload-empty').classList.remove('hidden');
+      document.getElementById('id-upload-preview').classList.add('hidden');
+    }
+
+    function handleApplicationSubmit(event) {
+      event.preventDefault();
+      const nextNum = 1001 + applications.length;
+      const id = `CERT-2026-${nextNum}`;
+      const urgencyEl = document.querySelector('input[name="urgency"]:checked');
+      const urgency = urgencyEl ? urgencyEl.value : 'Standard';
+      const now = nowTimestamp();
+
+      const newApp = {
+        id,
+        refNo: `ATME/REG/2026/${nextNum}`,
+        serialId: `ATME-QR-${Math.floor(10000 + Math.random() * 90000)}`,
+        issueDate: todayIso(),
+        studentName: document.getElementById('f-name').value.trim(),
+        rollNo: document.getElementById('f-roll').value.trim().toUpperCase(),
+        fatherName: document.getElementById('f-father').value.trim(),
+        motherName: document.getElementById('f-mother').value.trim(),
+        dob: document.getElementById('f-dob').value,
+        course: document.getElementById('f-course').value,
+        academicYear: document.getElementById('f-year').value,
+        certType: document.getElementById('f-cert-type').value,
+        urgency,
+        purpose: document.getElementById('f-purpose').value.trim(),
+        conduct: 'Good',
+        email: document.getElementById('f-email').value.trim(),
+        mobile: document.getElementById('f-mobile').value.trim(),
+        sendCertMail: document.getElementById('f-cert-mail').checked,
+        attachmentName: uploadedIdAttachment ? uploadedIdAttachment.name : 'Not attached',
+        attachmentDataUrl: uploadedIdAttachment ? (uploadedIdAttachment.dataUrl || '') : '',
+        attachmentMimeType: uploadedIdAttachment ? (uploadedIdAttachment.mimeType || '') : '',
+        customBody: '',
+        footnote: '',
+        sig1NameOverride: '',
+        sig1TitleOverride: '',
+        sig1ImageOverride: '',
+        sig2NameOverride: '',
+        sig2TitleOverride: '',
+        sig2ImageOverride: '',
+        stage: 2,
+        status: 'PENDING',
+        remarks: '',
+        submittedAt: now,
+        mailSentAt: '',
+        history: [
+          { title: 'Application Submitted', time: now, note: `Request filed for ${document.getElementById('f-cert-type').value} (${urgency}).` },
+          { title: 'Under Admin Review', time: now, note: 'Forwarded to Office of the Registrar for verification.' }
+        ]
+      };
+
+      applications.unshift(newApp);
+      persistApplications();
+      updateKpis();
+
+      document.getElementById('apply-form').reset();
+      clearIdUpload();
+
+      selectedTrackId = newApp.id;
+      showToast(`Application ${newApp.id} submitted successfully!`, 'success');
+      switchTab('track');
+    }
+
+    // =========================================================================
+    // TAB 3: TRACK PROGRESS
+    // =========================================================================
+    function getStatusBadge(status) {
+      if (status === 'APPROVED') {
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Approved &amp; Mailed</span>`;
+      }
+      if (status === 'REJECTED') {
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">Rejected</span>`;
+      }
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Under Review</span>`;
+    }
+
+    function renderTrackSection() {
+      const q = (document.getElementById('track-search')?.value || '').trim().toLowerCase();
+      const chipsEl = document.getElementById('track-quick-chips');
+      if (chipsEl) {
+        chipsEl.innerHTML = applications.slice(0, 6).map((a) => `
+          <button onclick="selectTrackApplication('${a.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${selectedTrackId === a.id ? 'bg-brand-navy text-white border-brand-navy' : 'bg-slate-50 text-brand-navy border-slate-200 hover:border-brand-gold'}">
+            ${escapeHtml(a.id)}
+          </button>
+        `).join('');
+      }
+
+      const filtered = applications.filter((a) => {
+        if (!q) return true;
+        return (
+          a.id.toLowerCase().includes(q) ||
+          a.rollNo.toLowerCase().includes(q) ||
+          a.studentName.toLowerCase().includes(q) ||
+          a.mobile.toLowerCase().includes(q)
+        );
+      });
+
+      const countEl = document.getElementById('track-match-count');
+      if (countEl) countEl.textContent = String(filtered.length);
+
+      const listEl = document.getElementById('track-list');
+      if (!filtered.length) {
+        listEl.innerHTML = `<div class="bg-white rounded-2xl border border-slate-200 p-6 text-center text-xs text-slate-500">No applications match your search.</div>`;
+        document.getElementById('track-detail').innerHTML = '';
+        return;
+      }
+
+      if (!filtered.some((a) => a.id === selectedTrackId)) {
+        selectedTrackId = filtered[0].id;
+      }
+
+      listEl.innerHTML = filtered.map((a) => {
+        const active = a.id === selectedTrackId;
+        return `
+          <div onclick="selectTrackApplication('${a.id}')" class="cursor-pointer rounded-2xl p-4 border transition ${active ? 'bg-brand-navy text-white border-brand-navy shadow-md' : 'bg-white text-slate-800 border-slate-200 hover:border-brand-gold'}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-mono text-xs font-bold ${active ? 'text-brand-goldLight' : 'text-brand-navy'}">${escapeHtml(a.id)}</span>
+              ${getStatusBadge(a.status)}
+            </div>
+            <p class="mt-1.5 text-sm font-bold truncate">${escapeHtml(a.studentName)}</p>
+            <p class="text-[11px] ${active ? 'text-slate-300' : 'text-slate-500'} truncate">${escapeHtml(a.certType)} &bull; ${escapeHtml(a.rollNo)}</p>
+          </div>
+        `;
+      }).join('');
+
+      const app = filtered.find((a) => a.id === selectedTrackId) || filtered[0];
+      renderTrackDetail(app);
+    }
+
+    function selectTrackApplication(id) {
+      selectedTrackId = id;
+      renderTrackSection();
+    }
+
+    function renderTrackDetail(app) {
+      const stages = ['Submitted', 'Under Admin Review', 'Approved & Signed', 'Certificate Mail Sent'];
+      const currentStage = app.status === 'REJECTED' ? 2 : (app.stage || 2);
+
+      const stepperHtml = stages.map((label, idx) => {
+        const num = idx + 1;
+        const done = app.status !== 'REJECTED' && num <= currentStage;
+        const rejectedHere = app.status === 'REJECTED' && num === 2;
+        return `
+          <div class="flex-1 flex flex-col items-center text-center relative">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 z-10 ${
+              rejectedHere ? 'bg-rose-600 border-rose-600 text-white' :
+              done ? 'bg-emerald-600 border-emerald-600 text-white' :
+              'bg-white border-slate-300 text-slate-400'
+            }">
+              ${rejectedHere ? '!' : done ? '&#10003;' : num}
+            </div>
+            <span class="mt-2 text-[11px] font-bold ${rejectedHere ? 'text-rose-600' : done ? 'text-brand-navy' : 'text-slate-400'}">${label}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('track-detail').innerHTML = `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-6 py-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-mono text-xs font-extrabold text-brand-navy bg-brand-goldBg px-2.5 py-1 rounded-lg border border-brand-gold/35">${escapeHtml(app.id)}</span>
+                ${getStatusBadge(app.status)}
+                ${app.urgency === 'Urgent' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">URGENT</span>` : ''}
+              </div>
+              <h2 class="text-lg font-extrabold text-brand-navy mt-2">${escapeHtml(app.certType)}</h2>
+              <p class="text-xs text-slate-500">${escapeHtml(app.studentName)} &bull; ${escapeHtml(app.rollNo)} &bull; ${escapeHtml(app.course)}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="openCertModal('${app.id}')" class="px-3.5 py-2 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold shadow-sm transition">
+                Preview / Print Certificate
+              </button>
+              ${app.status === 'APPROVED' && app.sendCertMail ? `
+                <button onclick="openMailModal('${app.id}')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                  View Certificate Mail
+                </button>
+              ` : ''}
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <!-- 4-Stage Progress Stepper -->
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div class="flex items-start justify-between gap-2">${stepperHtml}</div>
+            </div>
+
+            <!-- Particulars Summary -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Father / Guardian</span><strong class="text-slate-900">${escapeHtml(app.fatherName)}</strong></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Mother's Name</span><strong class="text-slate-900">${escapeHtml(app.motherName)}</strong></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Date of Birth</span><strong class="text-slate-900">${formatDisplayDate(app.dob)}</strong></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Academic Year</span><strong class="text-slate-900">${escapeHtml(app.academicYear)}</strong></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Email</span><strong class="text-slate-900 break-all">${escapeHtml(app.email)}</strong></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-100"><span class="text-slate-500 block">Purpose</span><strong class="text-slate-900">${escapeHtml(app.purpose)}</strong></div>
+            </div>
+
+            ${app.remarks ? `
+              <div class="p-4 rounded-xl border ${app.status === 'REJECTED' ? 'bg-rose-50 border-rose-200 text-rose-800' : 'bg-emerald-50 border-emerald-200 text-emerald-900'} text-xs">
+                <strong class="block mb-0.5">Registrar Remarks:</strong>
+                ${escapeHtml(app.remarks)}
+              </div>
+            ` : ''}
+
+            <!-- Activity Timeline -->
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-3">Activity Log</h3>
+              <div class="space-y-3">
+                ${(app.history || []).map((h) => `
+                  <div class="flex items-start gap-3 text-xs">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-gold mt-1 shrink-0"></span>
+                    <div>
+                      <p class="font-bold text-slate-900">${escapeHtml(h.title)} <span class="font-normal text-slate-400">&bull; ${escapeHtml(h.time)}</span></p>
+                      <p class="text-slate-600">${escapeHtml(h.note)}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // TAB 4: ADMIN AUTHENTICATION & CONSOLE
+    // =========================================================================
+    function togglePasswordVisibility(inputId) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    async function handleAdminLogin(event) {
+      event.preventDefault();
+      const errEl = document.getElementById('admin-login-error');
+      errEl.classList.add('hidden');
+
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value;
+      const uHash = await sha256Hex(u);
+      const pHash = await sha256Hex(p);
+
+      if (uHash === adminHashes.userHash && pHash === adminHashes.passHash) {
+        isAdminAuthenticated = true;
+        document.getElementById('login-password').value = '';
+        updateAdminNavIndicators();
+        renderAdminSection();
+        showToast('Signed in to Registrar Admin Portal.', 'success');
+      } else {
+        errEl.textContent = 'Invalid administrator username or password.';
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    function logoutAdmin() {
+      isAdminAuthenticated = false;
+      updateAdminNavIndicators();
+      renderAdminSection();
+      showToast('Signed out of Admin Portal.', 'info');
+    }
+
+    function renderAdminSection() {
+      document.getElementById('admin-login-view').classList.toggle('hidden', isAdminAuthenticated);
+      document.getElementById('admin-dashboard-view').classList.toggle('hidden', !isAdminAuthenticated);
+      if (isAdminAuthenticated) {
+        switchAdminSubTab(activeAdminSubTab);
+      }
+    }
+
+    function switchAdminSubTab(subtab) {
+      activeAdminSubTab = subtab;
+      document.querySelectorAll('.admin-subtab-panel').forEach((p) => {
+        p.classList.toggle('hidden', p.id !== `admin-subtab-${subtab}`);
+      });
+      document.querySelectorAll('.admin-subtab').forEach((b) => {
+        const active = b.dataset.admintab === subtab;
+        b.classList.toggle('bg-brand-gold', active);
+        b.classList.toggle('text-brand-navyDark', active);
+        b.classList.toggle('text-slate-200', !active);
+        b.classList.toggle('hover:bg-white/10', !active);
+      });
+
+      if (subtab === 'review') {
+        setAdminFilter(adminFilter);
+      } else if (subtab === 'editor') {
+        populateEditorSelector();
+        loadCertificateEditor(editingAppId || (applications[0] && applications[0].id));
+      } else if (subtab === 'design') {
+        loadDesignControls();
+      } else if (subtab === 'security') {
+        const senderEl = document.getElementById('cfg-mail-sender');
+        if (senderEl) senderEl.value = mailConfig.senderEmail || DEFAULT_MAIL_CONFIG.senderEmail;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-TAB A: REVIEW DESK
+    // -------------------------------------------------------------------------
+    function setAdminFilter(filter) {
+      adminFilter = filter;
+      document.querySelectorAll('.af-btn').forEach((b) => {
+        const active = b.dataset.af === filter;
+        b.classList.toggle('bg-brand-navy', active);
+        b.classList.toggle('text-white', active);
+        b.classList.toggle('bg-slate-100', !active);
+        b.classList.toggle('text-slate-700', !active);
+      });
+      renderAdminReviewTable();
+    }
+
+    function renderAdminReviewTable() {
+      const tbody = document.getElementById('admin-review-tbody');
+      if (!tbody) return;
+      const typeFilter = document.getElementById('admin-type-filter')?.value || 'ALL';
+      const q = (document.getElementById('admin-search')?.value || '').trim().toLowerCase();
+
+      const rows = applications.filter((a) => {
+        if (adminFilter !== 'ALL' && a.status !== adminFilter) return false;
+        if (typeFilter !== 'ALL' && a.certType !== typeFilter) return false;
+        if (q && !(a.id.toLowerCase().includes(q) || a.studentName.toLowerCase().includes(q) || a.rollNo.toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">No applications found for the selected filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map((a) => {
+        const isImage = Boolean(a.attachmentDataUrl) && (
+          (a.attachmentMimeType && a.attachmentMimeType.startsWith('image/')) ||
+          /\.(png|jpe?g|gif|webp)$/i.test(a.attachmentName || '') ||
+          a.attachmentDataUrl.startsWith('data:image/') ||
+          a.attachmentDataUrl.includes('placehold.co')
+        );
+        const uploadCell = a.attachmentDataUrl
+          ? `<button type="button" onclick="openUploadViewerModal('${a.id}')" class="group flex items-center gap-2 text-left p-1.5 rounded-xl border border-slate-200 hover:border-brand-gold bg-slate-50 hover:bg-brand-goldBg/40 transition max-w-[190px]">
+              ${isImage
+                ? `<img src="${escapeHtml(a.attachmentDataUrl)}" alt="Uploaded ID" onerror="this.style.display='none'" class="w-11 h-8 rounded-lg object-cover border border-slate-200 shrink-0 bg-white" />`
+                : `<div class="w-11 h-8 rounded-lg bg-brand-navy/10 text-brand-navy flex items-center justify-center shrink-0 text-[10px] font-bold">FILE</div>`
+              }
+              <div class="min-w-0">
+                <span class="block text-[11px] font-bold text-brand-navy group-hover:text-brand-gold truncate">${escapeHtml(a.attachmentName || 'Uploaded File')}</span>
+                <span class="block text-[10px] text-slate-500">Click to view</span>
+              </div>
+            </button>`
+          : `<span class="text-[11px] text-slate-400 italic">${escapeHtml(a.attachmentName || 'No file')}</span>`;
+
+        return `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="px-4 py-3.5 align-top">
+            <span class="font-mono font-bold text-brand-navy block">${escapeHtml(a.id)}</span>
+            <span class="text-[11px] text-slate-500">${escapeHtml(a.refNo || '')}</span>
+          </td>
+          <td class="px-4 py-3.5 align-top">
+            <span class="font-bold text-slate-900 block">${escapeHtml(a.studentName)}</span>
+            <span class="text-[11px] text-slate-500">${escapeHtml(a.rollNo)} &bull; ${escapeHtml(a.email)}</span>
+          </td>
+          <td class="px-4 py-3.5 align-top">
+            <span class="font-semibold text-slate-800 block">${escapeHtml(a.certType)}</span>
+            <span class="text-[11px] ${a.urgency === 'Urgent' ? 'text-rose-600 font-bold' : 'text-slate-500'}">${escapeHtml(a.urgency)} &bull; ${escapeHtml(a.submittedAt)}</span>
+          </td>
+          <td class="px-4 py-3.5 align-top">${uploadCell}</td>
+          <td class="px-4 py-3.5 align-top">${getStatusBadge(a.status)}</td>
+          <td class="px-4 py-3.5 align-top text-right">
+            <div class="inline-flex flex-wrap justify-end gap-1.5">
+              <button onclick="openEditorForApp('${a.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-brand-navy font-bold transition">Edit Details</button>
+              <button onclick="openCertModal('${a.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">Preview</button>
+              ${a.status !== 'APPROVED' ? `
+                <button onclick="openActionModal('${a.id}', 'APPROVE')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition">Approve</button>
+              ` : `
+                <button onclick="openMailModal('${a.id}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold transition">Mail</button>
+              `}
+              ${a.status !== 'REJECTED' ? `
+                <button onclick="openActionModal('${a.id}', 'REJECT')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold transition">Reject</button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    function openUploadViewerModal(id) {
+      const app = applications.find((a) => a.id === id);
+      if (!app) return;
+      document.getElementById('upload-viewer-title').textContent = `Uploaded Document — ${app.studentName} (${app.rollNo})`;
+
+      const isImage = Boolean(app.attachmentDataUrl) && (
+        (app.attachmentMimeType && app.attachmentMimeType.startsWith('image/')) ||
+        /\.(png|jpe?g|gif|webp)$/i.test(app.attachmentName || '') ||
+        app.attachmentDataUrl.startsWith('data:image/') ||
+        app.attachmentDataUrl.includes('placehold.co')
+      );
+
+      let previewHtml = '';
+      if (isImage) {
+        previewHtml = `
+          <div class="rounded-2xl border border-slate-200 bg-slate-100 p-3 flex items-center justify-center">
+            <img src="${escapeHtml(app.attachmentDataUrl)}" alt="${escapeHtml(app.attachmentName)}" class="max-h-[60vh] w-auto rounded-xl shadow-sm object-contain" />
+          </div>
+        `;
+      } else if (app.attachmentDataUrl) {
+        previewHtml = `
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center space-y-3">
+            <p class="text-xs font-bold text-brand-navy">${escapeHtml(app.attachmentName)}</p>
+            <p class="text-[11px] text-slate-500">This file is a non-image document (e.g., PDF). You can download or open it below.</p>
+            <a href="${escapeHtml(app.attachmentDataUrl)}" download="${escapeHtml(app.attachmentName || 'document')}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-navy text-white text-xs font-bold hover:bg-brand-navyLight transition">Download File</a>
+          </div>
+        `;
+      } else {
+        previewHtml = `<div class="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-xl border border-slate-200">No image or document was uploaded with this application.</div>`;
+      }
+
+      document.getElementById('upload-viewer-body').innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200">
+          <span><strong>Application:</strong> ${escapeHtml(app.id)} &bull; <strong>File:</strong> ${escapeHtml(app.attachmentName || 'None')}</span>
+          ${app.attachmentDataUrl ? `<a href="${escapeHtml(app.attachmentDataUrl)}" download="${escapeHtml(app.attachmentName || 'student-upload')}" class="text-brand-navy font-bold underline hover:text-brand-gold">Download</a>` : ''}
+        </div>
+        ${previewHtml}
+      `;
+      openModal('upload-viewer-modal');
+    }
+
+    function openEditorForApp(id) {
+      editingAppId = id;
+      switchAdminSubTab('editor');
+    }
+
+    function openActionModal(id, mode) {
+      const app = applications.find((a) => a.id === id);
+      if (!app) return;
+      const isApprove = mode === 'APPROVE';
+      const isImage = Boolean(app.attachmentDataUrl) && (
+        (app.attachmentMimeType && app.attachmentMimeType.startsWith('image/')) ||
+        /\.(png|jpe?g|gif|webp)$/i.test(app.attachmentName || '') ||
+        app.attachmentDataUrl.startsWith('data:image/') ||
+        app.attachmentDataUrl.includes('placehold.co')
+      );
+
+      document.getElementById('action-modal-title').textContent = isApprove
+        ? `Approve & Dispatch Mail — ${app.id}`
+        : `Reject Application — ${app.id}`;
+
+      document.getElementById('action-modal-body').innerHTML = `
+        <div class="text-xs text-slate-600 space-y-1">
+          <p><strong class="text-slate-900">Student:</strong> ${escapeHtml(app.studentName)} (${escapeHtml(app.rollNo)})</p>
+          <p><strong class="text-slate-900">Certificate:</strong> ${escapeHtml(app.certType)}</p>
+        </div>
+        ${app.attachmentDataUrl ? `
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-brand-navy">Uploaded ID / Supporting Image</span>
+              <button type="button" onclick="openUploadViewerModal('${app.id}')" class="font-bold text-brand-navy underline hover:text-brand-gold">View Full Size</button>
+            </div>
+            ${isImage
+              ? `<img src="${escapeHtml(app.attachmentDataUrl)}" alt="Uploaded Student ID" class="max-h-40 w-full object-contain rounded-lg bg-white border border-slate-200 p-1" />`
+              : `<p class="text-[11px] text-slate-600">${escapeHtml(app.attachmentName)}</p>`
+            }
+          </div>
+        ` : ''}
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Registrar Remarks</label>
+          <textarea id="modal-remarks" rows="3" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-brand-navy" placeholder="${isApprove ? 'Verified against academic records and digitally signed.' : 'Specify reason for rejection...'}">${escapeHtml(isApprove ? 'Verified against academic records and digitally signed.' : '')}</textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button onclick="closeModal('action-modal')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button onclick="confirmRegistrarAction('${app.id}', '${mode}')" class="px-4 py-2 rounded-xl ${isApprove ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'} text-white text-xs font-bold shadow-sm">
+            ${isApprove ? 'Confirm Approval & Send Mail' : 'Confirm Rejection'}
+          </button>
+        </div>
+      `;
+      openModal('action-modal');
+    }
+
+    function confirmRegistrarAction(id, mode) {
+      const app = applications.find((a) => a.id === id);
+      if (!app) return;
+      const remarks = (document.getElementById('modal-remarks')?.value || '').trim();
+      const now = nowTimestamp();
+
+      if (mode === 'APPROVE') {
+        app.status = 'APPROVED';
+        app.stage = app.sendCertMail ? 4 : 3;
+        app.remarks = remarks || 'Approved and digitally signed by the Registrar.';
+        app.issueDate = app.issueDate || todayIso();
+        app.mailSentAt = app.sendCertMail ? now : '';
+        app.history.push({ title: 'Approved & Signed', time: now, note: app.remarks });
+        if (app.sendCertMail) {
+          app.history.push({ title: 'Certificate Mail Sent', time: now, note: `Digital PDF dispatched to ${app.email}.` });
+        }
+        showToast(`Approved ${app.id}${app.sendCertMail ? ' & dispatched Certificate Mail' : ''}.`, 'success');
+      } else {
+        app.status = 'REJECTED';
+        app.stage = 2;
+        app.remarks = remarks || 'Application rejected by Office of the Registrar.';
+        app.history.push({ title: 'Application Rejected', time: now, note: app.remarks });
+        showToast(`Rejected application ${app.id}.`, 'warning');
+      }
+
+      persistApplications();
+      updateKpis();
+      renderAdminReviewTable();
+      closeModal('action-modal');
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-TAB B: FULL CERTIFICATE DETAILS EDITOR
+    // -------------------------------------------------------------------------
+    function populateEditorSelector() {
+      const sel = document.getElementById('editor-app-selector');
+      if (!sel) return;
+      sel.innerHTML = applications.map((a) => `
+        <option value="${escapeHtml(a.id)}" ${a.id === editingAppId ? 'selected' : ''}>${escapeHtml(a.id)} — ${escapeHtml(a.studentName)} (${escapeHtml(a.certType)})</option>
+      `).join('');
+    }
+
+    function loadCertificateEditor(id) {
+      const app = applications.find((a) => a.id === id) || applications[0];
+      if (!app) return;
+      editingAppId = app.id;
+      draftCertEdits = JSON.parse(JSON.stringify(app));
+
+      const sel = document.getElementById('editor-app-selector');
+      if (sel) sel.value = app.id;
+
+      document.getElementById('ce-ref-no').value = draftCertEdits.refNo || '';
+      document.getElementById('ce-issue-date').value = draftCertEdits.issueDate || todayIso();
+      document.getElementById('ce-cert-type').value = draftCertEdits.certType || '';
+      document.getElementById('ce-serial-id').value = draftCertEdits.serialId || '';
+      document.getElementById('ce-name').value = draftCertEdits.studentName || '';
+      document.getElementById('ce-roll').value = draftCertEdits.rollNo || '';
+      document.getElementById('ce-father').value = draftCertEdits.fatherName || '';
+      document.getElementById('ce-mother').value = draftCertEdits.motherName || '';
+      document.getElementById('ce-dob').value = draftCertEdits.dob || '';
+      document.getElementById('ce-year').value = draftCertEdits.academicYear || '';
+      document.getElementById('ce-course').value = draftCertEdits.course || '';
+      document.getElementById('ce-conduct').value = draftCertEdits.conduct || 'Good';
+      document.getElementById('ce-purpose').value = draftCertEdits.purpose || '';
+      document.getElementById('ce-body').value = draftCertEdits.customBody && draftCertEdits.customBody.trim()
+        ? draftCertEdits.customBody
+        : interpolateTemplate(designConfig.bodyTemplate, draftCertEdits);
+      document.getElementById('ce-footnote').value = draftCertEdits.footnote || '';
+      document.getElementById('ce-sig1-name').value = draftCertEdits.sig1NameOverride || '';
+      document.getElementById('ce-sig1-title').value = draftCertEdits.sig1TitleOverride || '';
+      document.getElementById('ce-sig2-name').value = draftCertEdits.sig2NameOverride || '';
+      document.getElementById('ce-sig2-title').value = draftCertEdits.sig2TitleOverride || '';
+
+      updateCertSigPreviewUI(1, draftCertEdits.sig1ImageOverride || '');
+      updateCertSigPreviewUI(2, draftCertEdits.sig2ImageOverride || '');
+
+      const uploadBox = document.getElementById('ce-upload-box');
+      if (uploadBox) {
+        const isImage = Boolean(draftCertEdits.attachmentDataUrl) && (
+          (draftCertEdits.attachmentMimeType && draftCertEdits.attachmentMimeType.startsWith('image/')) ||
+          /\.(png|jpe?g|gif|webp)$/i.test(draftCertEdits.attachmentName || '') ||
+          draftCertEdits.attachmentDataUrl.startsWith('data:image/') ||
+          draftCertEdits.attachmentDataUrl.includes('placehold.co')
+        );
+        if (draftCertEdits.attachmentDataUrl) {
+          uploadBox.innerHTML = `
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                ${isImage
+                  ? `<img src="${escapeHtml(draftCertEdits.attachmentDataUrl)}" alt="Uploaded ID" class="w-16 h-11 rounded-lg object-cover border border-slate-200 bg-white shrink-0" />`
+                  : `<div class="w-12 h-11 rounded-lg bg-brand-navy/10 text-brand-navy flex items-center justify-center text-[10px] font-bold shrink-0">FILE</div>`
+                }
+                <div class="min-w-0">
+                  <span class="block text-[10px] font-extrabold uppercase tracking-wider text-brand-gold">Student Uploaded ID / Image</span>
+                  <span class="block text-xs font-bold text-brand-navy truncate">${escapeHtml(draftCertEdits.attachmentName || 'Uploaded Document')}</span>
+                </div>
+              </div>
+              <button type="button" onclick="openUploadViewerModal('${draftCertEdits.id}')" class="px-3 py-1.5 rounded-lg bg-brand-navy hover:bg-brand-navyLight text-white text-[11px] font-bold shrink-0 transition">View Image</button>
+            </div>
+          `;
+        } else {
+          uploadBox.innerHTML = `<span class="text-[11px] text-slate-500">Student Uploaded ID / Image: <strong class="text-slate-700">${escapeHtml(draftCertEdits.attachmentName || 'Not attached')}</strong></span>`;
+        }
+      }
+
+      renderCertEditorLivePreview();
+    }
+
+    function updateCertSigPreviewUI(slot, dataUrl) {
+      const img = document.getElementById(`ce-sig${slot}-preview`);
+      const status = document.getElementById(`ce-sig${slot}-status`);
+      const clearBtn = document.getElementById(`ce-sig${slot}-clear`);
+      if (!img || !status || !clearBtn) return;
+      if (dataUrl) {
+        img.src = dataUrl;
+        img.classList.remove('hidden');
+        status.textContent = slot === 1 ? 'Custom primary officer signature set' : 'Custom co-signatory signature set';
+        clearBtn.classList.remove('hidden');
+      } else {
+        img.src = '';
+        img.classList.add('hidden');
+        status.textContent = slot === 1 ? 'Using global primary officer signature' : 'Using global co-signatory signature';
+        clearBtn.classList.add('hidden');
+      }
+    }
+
+    function handleCertSigUpload(slot, event) {
+      const file = event.target.files[0];
+      if (!file || !draftCertEdits) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (slot === 1) draftCertEdits.sig1ImageOverride = e.target.result;
+        else draftCertEdits.sig2ImageOverride = e.target.result;
+        updateCertSigPreviewUI(slot, e.target.result);
+        renderCertEditorLivePreview();
+        showToast('Custom officer signature image applied to this certificate.', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearCertSigUpload(slot) {
+      if (!draftCertEdits) return;
+      if (slot === 1) draftCertEdits.sig1ImageOverride = '';
+      else draftCertEdits.sig2ImageOverride = '';
+      const fileInput = document.getElementById(`ce-sig${slot}-file`);
+      if (fileInput) fileInput.value = '';
+      updateCertSigPreviewUI(slot, '');
+      renderCertEditorLivePreview();
+    }
+
+    function onCertEditorInput() {
+      if (!draftCertEdits) return;
+      draftCertEdits.refNo = document.getElementById('ce-ref-no').value;
+      draftCertEdits.issueDate = document.getElementById('ce-issue-date').value;
+      draftCertEdits.certType = document.getElementById('ce-cert-type').value;
+      draftCertEdits.serialId = document.getElementById('ce-serial-id').value;
+      draftCertEdits.studentName = document.getElementById('ce-name').value;
+      draftCertEdits.rollNo = document.getElementById('ce-roll').value;
+      draftCertEdits.fatherName = document.getElementById('ce-father').value;
+      draftCertEdits.motherName = document.getElementById('ce-mother').value;
+      draftCertEdits.dob = document.getElementById('ce-dob').value;
+      draftCertEdits.academicYear = document.getElementById('ce-year').value;
+      draftCertEdits.course = document.getElementById('ce-course').value;
+      draftCertEdits.conduct = document.getElementById('ce-conduct').value;
+      draftCertEdits.purpose = document.getElementById('ce-purpose').value;
+      draftCertEdits.customBody = document.getElementById('ce-body').value;
+      draftCertEdits.footnote = document.getElementById('ce-footnote').value;
+      draftCertEdits.sig1NameOverride = document.getElementById('ce-sig1-name').value;
+      draftCertEdits.sig1TitleOverride = document.getElementById('ce-sig1-title').value;
+      draftCertEdits.sig2NameOverride = document.getElementById('ce-sig2-name').value;
+      draftCertEdits.sig2TitleOverride = document.getElementById('ce-sig2-title').value;
+
+      renderCertEditorLivePreview();
+    }
+
+    function resetEditorBodyToTemplate() {
+      if (!draftCertEdits) return;
+      const templated = interpolateTemplate(designConfig.bodyTemplate, draftCertEdits);
+      document.getElementById('ce-body').value = templated;
+      draftCertEdits.customBody = templated;
+      renderCertEditorLivePreview();
+      showToast('Certificate description reset to default template.', 'info');
+    }
+
+    function renderCertEditorLivePreview() {
+      const target = document.getElementById('cert-editor-live-preview');
+      if (!target || !draftCertEdits) return;
+      target.innerHTML = buildCertificateHtml(draftCertEdits, designConfig);
+    }
+
+    function saveCertificateEdits(approveAndMail) {
+      const idx = applications.findIndex((a) => a.id === editingAppId);
+      if (idx === -1 || !draftCertEdits) return;
+      const now = nowTimestamp();
+      const updated = { ...applications[idx], ...draftCertEdits };
+      updated.history = Array.isArray(updated.history) ? [...updated.history] : [];
+      updated.history.push({ title: 'Certificate Details Updated', time: now, note: 'Registrar edited certificate particulars/text.' });
+
+      if (approveAndMail) {
+        updated.status = 'APPROVED';
+        updated.stage = updated.sendCertMail ? 4 : 3;
+        updated.mailSentAt = updated.sendCertMail ? now : '';
+        updated.remarks = updated.remarks || 'Edited, approved, and digitally signed by the Registrar.';
+        updated.history.push({ title: 'Approved & Signed', time: now, note: 'Approved from Certificate Details Editor.' });
+        if (updated.sendCertMail) {
+          updated.history.push({ title: 'Certificate Mail Sent', time: now, note: `Digital PDF dispatched to ${updated.email}.` });
+        }
+      }
+
+      applications[idx] = updated;
+      persistApplications();
+      updateKpis();
+      populateEditorSelector();
+      showToast(approveAndMail ? `Saved, approved & mailed ${updated.id}!` : `Saved certificate changes for ${updated.id}.`, 'success');
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-TAB C: CERTIFICATE DESIGN STUDIO
+    // -------------------------------------------------------------------------
+    function loadDesignControls() {
+      draftDesign = { ...designConfig };
+      document.getElementById('d-inst-name').value = draftDesign.instName || '';
+      document.getElementById('d-subtitle').value = draftDesign.subtitle || '';
+      document.getElementById('d-affiliation').value = draftDesign.affiliation || '';
+      document.getElementById('d-address').value = draftDesign.address || '';
+      document.getElementById('d-contact').value = draftDesign.contact || '';
+      document.getElementById('d-border').value = draftDesign.borderStyle || 'blank';
+      document.getElementById('d-blank-paper').checked = Boolean(draftDesign.blankPaperMode);
+      document.getElementById('d-font').value = draftDesign.fontStyle || 'serif';
+      document.getElementById('d-primary').value = draftDesign.primaryColor || '#0F2744';
+      document.getElementById('d-accent').value = draftDesign.accentColor || '#C89B3C';
+      document.getElementById('d-watermark-on').checked = Boolean(draftDesign.watermarkEnabled);
+      document.getElementById('d-watermark-text').value = draftDesign.watermarkText || '';
+      document.getElementById('d-seal-text').value = draftDesign.sealText || '';
+      document.getElementById('d-sig1-name').value = draftDesign.sig1Name || '';
+      document.getElementById('d-sig1-title').value = draftDesign.sig1Title || '';
+      document.getElementById('d-sig2-name').value = draftDesign.sig2Name || '';
+      document.getElementById('d-sig2-title').value = draftDesign.sig2Title || '';
+      document.getElementById('d-body-template').value = draftDesign.bodyTemplate || DEFAULT_DESIGN.bodyTemplate;
+
+      updatePresetIconButtons();
+      document.getElementById('btn-clear-logo').classList.toggle('hidden', !draftDesign.customLogoDataUrl);
+      updateDesignSigPreviewUI(1, draftDesign.sig1ImageDataUrl || '');
+      updateDesignSigPreviewUI(2, draftDesign.sig2ImageDataUrl || '');
+      renderDesignLivePreview();
+    }
+
+    function updateDesignSigPreviewUI(slot, dataUrl) {
+      const img = document.getElementById(`d-sig${slot}-preview`);
+      const status = document.getElementById(`d-sig${slot}-status`);
+      const clearBtn = document.getElementById(`d-sig${slot}-clear`);
+      if (!img || !status || !clearBtn) return;
+      if (dataUrl) {
+        img.src = dataUrl;
+        img.classList.remove('hidden');
+        status.textContent = slot === 1 ? 'Primary officer signature uploaded' : 'Secondary officer signature uploaded';
+        clearBtn.classList.remove('hidden');
+      } else {
+        img.src = '';
+        img.classList.add('hidden');
+        status.textContent = slot === 1 ? 'No primary officer signature uploaded' : 'No secondary officer signature uploaded';
+        clearBtn.classList.add('hidden');
+      }
+    }
+
+    function handleDesignSigUpload(slot, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (slot === 1) draftDesign.sig1ImageDataUrl = e.target.result;
+        else draftDesign.sig2ImageDataUrl = e.target.result;
+        updateDesignSigPreviewUI(slot, e.target.result);
+        renderDesignLivePreview();
+        showToast('Officer signature image uploaded! Click "Save & Apply Global Design" to persist.', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearDesignSigUpload(slot) {
+      if (slot === 1) draftDesign.sig1ImageDataUrl = '';
+      else draftDesign.sig2ImageDataUrl = '';
+      const fileInput = document.getElementById(`d-sig${slot}-file`);
+      if (fileInput) fileInput.value = '';
+      updateDesignSigPreviewUI(slot, '');
+      renderDesignLivePreview();
+    }
+
+    function updatePresetIconButtons() {
+      document.querySelectorAll('.preset-icon-btn').forEach((btn) => {
+        const active = btn.dataset.icon === draftDesign.presetIcon && !draftDesign.customLogoDataUrl;
+        btn.classList.toggle('bg-brand-navy', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('border-brand-navy', active);
+        btn.classList.toggle('bg-white', !active);
+        btn.classList.toggle('text-slate-700', !active);
+        btn.classList.toggle('border-slate-300', !active);
+      });
+    }
+
+    function selectPresetIcon(icon) {
+      draftDesign.presetIcon = icon;
+      draftDesign.customLogoDataUrl = '';
+      document.getElementById('btn-clear-logo').classList.add('hidden');
+      updatePresetIconButtons();
+      renderDesignLivePreview();
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        draftDesign.customLogoDataUrl = e.target.result;
+        document.getElementById('btn-clear-logo').classList.remove('hidden');
+        updatePresetIconButtons();
+        renderDesignLivePreview();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearCustomLogo() {
+      draftDesign.customLogoDataUrl = '';
+      const input = document.getElementById('d-logo-file');
+      if (input) input.value = '';
+      document.getElementById('btn-clear-logo').classList.add('hidden');
+      updatePresetIconButtons();
+      renderDesignLivePreview();
+    }
+
+    function onDesignInput() {
+      draftDesign.instName = document.getElementById('d-inst-name').value;
+      draftDesign.subtitle = document.getElementById('d-subtitle').value;
+      draftDesign.affiliation = document.getElementById('d-affiliation').value;
+      draftDesign.address = document.getElementById('d-address').value;
+      draftDesign.contact = document.getElementById('d-contact').value;
+      draftDesign.borderStyle = document.getElementById('d-border').value;
+      draftDesign.blankPaperMode = document.getElementById('d-blank-paper').checked;
+      draftDesign.fontStyle = document.getElementById('d-font').value;
+      draftDesign.primaryColor = document.getElementById('d-primary').value;
+      draftDesign.accentColor = document.getElementById('d-accent').value;
+      draftDesign.watermarkEnabled = document.getElementById('d-watermark-on').checked;
+      draftDesign.watermarkText = document.getElementById('d-watermark-text').value;
+      draftDesign.sealText = document.getElementById('d-seal-text').value;
+      draftDesign.sig1Name = document.getElementById('d-sig1-name').value;
+      draftDesign.sig1Title = document.getElementById('d-sig1-title').value;
+      draftDesign.sig2Name = document.getElementById('d-sig2-name').value;
+      draftDesign.sig2Title = document.getElementById('d-sig2-title').value;
+      draftDesign.bodyTemplate = document.getElementById('d-body-template').value;
+      renderDesignLivePreview();
+    }
+
+    function renderDesignLivePreview() {
+      const target = document.getElementById('design-live-preview');
+      if (!target) return;
+      const sampleApp = applications[0] || getDefaultSeedApplications()[0];
+      target.innerHTML = buildCertificateHtml({ ...sampleApp, customBody: '' }, draftDesign);
+    }
+
+    function saveDesignConfig() {
+      designConfig = { ...draftDesign };
+      safeJsonSave(KEYS.DESIGN, designConfig);
+      applyInstitutionBranding();
+      showToast('Global certificate design & officer signatures saved!', 'success');
+    }
+
+    function resetDesignDefaults() {
+      designConfig = { ...DEFAULT_DESIGN };
+      draftDesign = { ...DEFAULT_DESIGN };
+      safeJsonSave(KEYS.DESIGN, designConfig);
+      applyInstitutionBranding();
+      loadDesignControls();
+      showToast('Certificate design reset to ATME White Blank Paper defaults.', 'info');
+    }
+
+    // -------------------------------------------------------------------------
+    // SUB-TAB D: MAIL & SECURITY SETTINGS
+    // -------------------------------------------------------------------------
+    function saveMailConfig(event) {
+      event.preventDefault();
+      const email = document.getElementById('cfg-mail-sender').value.trim();
+      mailConfig.senderEmail = email || DEFAULT_MAIL_CONFIG.senderEmail;
+      safeJsonSave(KEYS.MAIL_CFG, mailConfig);
+      showToast('Official Certificate Mail sender saved.', 'success');
+    }
+
+    async function updateAdminCredentials(event) {
+      event.preventDefault();
+      const curPw = document.getElementById('sec-current-pw').value;
+      const newUser = document.getElementById('sec-new-user').value.trim();
+      const newPw = document.getElementById('sec-new-pw').value;
+      const confirmPw = document.getElementById('sec-confirm-pw').value;
+
+      if (newPw !== confirmPw) {
+        showToast('New password and confirmation do not match.', 'error');
+        return;
+      }
+
+      const curHash = await sha256Hex(curPw);
+      if (curHash !== adminHashes.passHash) {
+        showToast('Current password is incorrect.', 'error');
+        return;
+      }
+
+      if (newUser) {
+        adminHashes.userHash = await sha256Hex(newUser);
+      }
+      adminHashes.passHash = await sha256Hex(newPw);
+      safeJsonSave(KEYS.ADMIN_HASHES, adminHashes);
+
+      document.getElementById('sec-current-pw').value = '';
+      document.getElementById('sec-new-user').value = '';
+      document.getElementById('sec-new-pw').value = '';
+      document.getElementById('sec-confirm-pw').value = '';
+      showToast('Admin credentials updated securely.', 'success');
+    }
+
+    // =========================================================================
+    // OFFICIAL CERTIFICATE TEMPLATE & RENDERER
+    // =========================================================================
+    function interpolateTemplate(template, app) {
+      const tpl = template || DEFAULT_DESIGN.bodyTemplate;
+      return tpl
+        .replace(/\{\{studentName\}\}/g, app.studentName || '')
+        .replace(/\{\{fatherName\}\}/g, app.fatherName || '')
+        .replace(/\{\{motherName\}\}/g, app.motherName || '')
+        .replace(/\{\{dob\}\}/g, formatDisplayDate(app.dob))
+        .replace(/\{\{rollNo\}\}/g, app.rollNo || '')
+        .replace(/\{\{course\}\}/g, app.course || '')
+        .replace(/\{\{academicYear\}\}/g, app.academicYear || '')
+        .replace(/\{\{certType\}\}/g, app.certType || '')
+        .replace(/\{\{conduct\}\}/g, app.conduct || 'Good')
+        .replace(/\{\{purpose\}\}/g, app.purpose || '');
+    }
+
+    function buildCertificateHtml(app, cfg) {
+      const primary = cfg.primaryColor || '#0F2744';
+      const accent = cfg.accentColor || '#C89B3C';
+      const isBlankPaper = Boolean(cfg.blankPaperMode) || cfg.borderStyle === 'blank';
+      const fontFamily =
+        cfg.fontStyle === 'display' ? "'Cinzel', Georgia, serif" :
+        cfg.fontStyle === 'sans' ? "'Inter', system-ui, sans-serif" :
+        "'Playfair Display', Georgia, serif";
+
+      const borderFrame =
+        cfg.borderStyle === 'blank'
+          ? `border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);`
+          : cfg.borderStyle === 'royal'
+          ? `border: 8px solid ${primary}; outline: 2px solid ${accent}; outline-offset: -14px;`
+          : cfg.borderStyle === 'minimal'
+          ? `border: 2px solid ${primary}; border-top: 10px solid ${primary};`
+          : cfg.borderStyle === 'guilloche'
+          ? `border: 6px double ${accent}; box-shadow: inset 0 0 0 6px #fff, inset 0 0 0 9px ${primary};`
+          : `border: 4px double ${accent}; outline: 2px solid ${primary}; outline-offset: -10px;`;
+
+      const logoHtml = cfg.customLogoDataUrl
+        ? `<img src="${cfg.customLogoDataUrl}" alt="Institution Logo" class="w-16 h-16 object-contain mx-auto mb-2 rounded-lg" />`
+        : `<div class="w-14 h-14 rounded-2xl mx-auto mb-2 flex items-center justify-center" style="background:${primary}; color:${accent};">${getPresetIconSvg(cfg.presetIcon, 'w-8 h-8')}</div>`;
+
+      const bodyText = (app.customBody && app.customBody.trim())
+        ? app.customBody
+        : interpolateTemplate(cfg.bodyTemplate, app);
+
+      const sig1Name = app.sig1NameOverride || cfg.sig1Name || 'Principal';
+      const sig1Title = app.sig1TitleOverride || cfg.sig1Title || 'Principal';
+      const sig1Img = app.sig1ImageOverride || cfg.sig1ImageDataUrl || '';
+
+      const sig2Name = app.sig2NameOverride || cfg.sig2Name || 'Registrar';
+      const sig2Title = app.sig2TitleOverride || cfg.sig2Title || 'Registrar';
+      const sig2Img = app.sig2ImageOverride || cfg.sig2ImageDataUrl || '';
+
+      const renderSigSlot = (imgUrl) => imgUrl
+        ? `<div class="h-14 flex items-end justify-center pb-1"><img src="${imgUrl}" alt="Officer Signature" class="max-h-14 max-w-[160px] object-contain mx-auto mix-blend-multiply" /></div>`
+        : `<div class="h-12 flex items-end justify-center pb-1"><span class="text-[10px] italic text-slate-400">Signature of Officer</span></div>`;
+
+      const titleHtml = isBlankPaper
+        ? `<h3 class="inline-block pb-1 text-base sm:text-lg font-extrabold uppercase tracking-widest border-b-2" style="color:${primary}; border-color:${primary}; font-family:${fontFamily};">${escapeHtml(app.certType)}</h3>`
+        : `<span class="inline-block px-6 py-1.5 rounded-full text-sm sm:text-base font-extrabold uppercase tracking-widest border-2" style="color:${primary}; border-color:${accent}; font-family:${fontFamily};">${escapeHtml(app.certType)}</span>`;
+
+      const particularsHtml = isBlankPaper ? '' : `
+            <!-- Particulars Table -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-[11px] bg-slate-50/90 p-3.5 rounded-xl border border-slate-200">
+              <div><span class="text-slate-500 block">Student Name</span><strong class="text-slate-900">${escapeHtml(app.studentName)}</strong></div>
+              <div><span class="text-slate-500 block">USN / Roll No.</span><strong class="font-mono text-slate-900">${escapeHtml(app.rollNo)}</strong></div>
+              <div><span class="text-slate-500 block">Date of Birth</span><strong class="text-slate-900">${formatDisplayDate(app.dob)}</strong></div>
+              <div><span class="text-slate-500 block">Father / Guardian</span><strong class="text-slate-900">${escapeHtml(app.fatherName)}</strong></div>
+              <div><span class="text-slate-500 block">Mother's Name</span><strong class="text-slate-900">${escapeHtml(app.motherName)}</strong></div>
+              <div><span class="text-slate-500 block">Academic Year</span><strong class="text-slate-900">${escapeHtml(app.academicYear)}</strong></div>
+            </div>`;
+
+      return `
+        <div class="relative bg-white text-slate-900 ${isBlankPaper ? 'p-8 sm:p-14 rounded-none sm:rounded-md' : 'p-6 sm:p-10 rounded-xl shadow-lg'} overflow-hidden" style="${borderFrame}">
+          ${cfg.watermarkEnabled ? `
+            <div class="pointer-events-none select-none absolute inset-0 flex items-center justify-center opacity-[0.06] -rotate-12">
+              <span class="text-3xl sm:text-5xl font-extrabold tracking-widest uppercase text-center" style="color:${primary}; font-family:${fontFamily};">
+                ${escapeHtml(cfg.watermarkText || cfg.instName)}
+              </span>
+            </div>
+          ` : ''}
+
+          <div class="relative z-10 space-y-6">
+            <!-- Header -->
+            <div class="text-center pb-4 ${isBlankPaper ? 'border-b border-slate-300' : 'border-b-2'}" style="${isBlankPaper ? '' : `border-color:${accent};`}">
+              ${logoHtml}
+              <h2 class="text-xl sm:text-2xl font-extrabold tracking-wide uppercase" style="color:${primary}; font-family:${fontFamily};">
+                ${escapeHtml(cfg.instName)}
+              </h2>
+              ${cfg.subtitle ? `<p class="text-[11px] font-semibold text-slate-600 mt-1">${escapeHtml(cfg.subtitle)}</p>` : ''}
+              ${cfg.affiliation ? `<p class="text-[10px] font-bold uppercase tracking-wider mt-0.5" style="color:${isBlankPaper ? '#475569' : accent};">${escapeHtml(cfg.affiliation)}</p>` : ''}
+              ${cfg.address ? `<p class="text-[10px] text-slate-500 mt-1">${escapeHtml(cfg.address)}</p>` : ''}
+              ${cfg.contact ? `<p class="text-[10px] text-slate-500">${escapeHtml(cfg.contact)}</p>` : ''}
+            </div>
+
+            <!-- Ref No & Date -->
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-slate-700">
+              <span>Ref. No.: <strong class="font-mono" style="color:${primary};">${escapeHtml(app.refNo || app.id)}</strong></span>
+              <span>Date: <strong>${formatDisplayDate(app.issueDate || todayIso())}</strong></span>
+            </div>
+
+            <!-- Certificate Title -->
+            <div class="text-center py-2">
+              ${titleHtml}
+            </div>
+
+            <!-- Description Written Cleanly on White Blank Paper -->
+            <div class="text-sm sm:text-[15px] leading-8 text-slate-900 text-justify whitespace-pre-line py-2" style="font-family:'Merriweather', Georgia, serif;">${escapeHtml(bodyText)}</div>
+
+            ${particularsHtml}
+
+            ${app.footnote ? `<p class="text-[11px] italic text-slate-600 pt-1">${escapeHtml(app.footnote)}</p>` : ''}
+
+            <!-- Footer: Dual Officer Signatures & Official Seal -->
+            <div class="pt-10 mt-6 ${isBlankPaper ? '' : 'border-t border-slate-200'} grid grid-cols-1 sm:grid-cols-3 gap-6 items-end">
+              <!-- Co-Signatory Officer -->
+              <div class="text-center">
+                ${renderSigSlot(sig2Img)}
+                <div class="border-t border-slate-400 w-40 mx-auto pt-1.5">
+                  <p class="text-xs font-bold" style="color:${primary};">${escapeHtml(sig2Name)}</p>
+                  <p class="text-[10px] text-slate-500">${escapeHtml(sig2Title)}</p>
+                </div>
+              </div>
+
+              <!-- Official Seal & Serial -->
+              <div class="text-center flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center p-2 text-center" style="border-color:${isBlankPaper ? '#94a3b8' : accent}; color:${primary};">
+                  <span class="text-[8px] font-extrabold uppercase leading-tight tracking-wider">${escapeHtml(cfg.sealText || 'OFFICIAL SEAL')}</span>
+                </div>
+                <span class="mt-1.5 text-[9px] font-mono text-slate-500">Serial: ${escapeHtml(app.serialId || app.id)}</span>
+              </div>
+
+              <!-- Primary Issuing Officer -->
+              <div class="text-center">
+                ${renderSigSlot(sig1Img)}
+                <div class="border-t border-slate-400 w-40 mx-auto pt-1.5">
+                  <p class="text-xs font-bold" style="color:${primary};">${escapeHtml(sig1Name)}</p>
+                  <p class="text-[10px] text-slate-500">${escapeHtml(sig1Title)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // MODALS: CERTIFICATE PREVIEW & DIGITAL CERTIFICATE MAIL
+    // =========================================================================
+    function openCertModal(id) {
+      const app = (id === editingAppId && activeTab === 'admin' && activeAdminSubTab === 'editor' && draftCertEdits)
+        ? draftCertEdits
+        : applications.find((a) => a.id === id);
+      if (!app) return;
+      document.getElementById('printable-certificate-area').innerHTML = buildCertificateHtml(app, designConfig);
+      openModal('cert-modal');
+    }
+
+    function openMailModal(id) {
+      const app = applications.find((a) => a.id === id);
+      if (!app) return;
+      const sender = mailConfig.senderEmail || DEFAULT_MAIL_CONFIG.senderEmail;
+      document.getElementById('mail-modal-body').innerHTML = `
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-1.5">
+          <p><span class="text-slate-500 font-semibold">From:</span> <strong class="text-brand-navy">${escapeHtml(designConfig.instName)} &lt;${escapeHtml(sender)}&gt;</strong></p>
+          <p><span class="text-slate-500 font-semibold">To:</span> <strong>${escapeHtml(app.studentName)} &lt;${escapeHtml(app.email)}&gt;</strong></p>
+          <p><span class="text-slate-500 font-semibold">Subject:</span> <strong>Official ${escapeHtml(app.certType)} Approved — Ref: ${escapeHtml(app.refNo || app.id)}</strong></p>
+          <p><span class="text-slate-500 font-semibold">Dispatched At:</span> ${escapeHtml(app.mailSentAt || nowTimestamp())}</p>
+        </div>
+        <div class="text-xs text-slate-700 leading-relaxed space-y-2.5">
+          <p>Dear <strong>${escapeHtml(app.studentName)}</strong> (${escapeHtml(app.rollNo)}),</p>
+          <p>Your request for a <strong>${escapeHtml(app.certType)}</strong> (Application ID: <strong>${escapeHtml(app.id)}</strong>) has been verified and approved by the Office of the Registrar, ${escapeHtml(designConfig.instName)}.</p>
+          <p>Your officially signed certificate is attached below and ready for printing or digital submission.</p>
+        </div>
+        <div class="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-[10px]">PDF</div>
+            <div class="text-xs">
+              <p class="font-bold text-emerald-950">${escapeHtml(app.id)}_${escapeHtml(app.rollNo)}.pdf</p>
+              <p class="text-[11px] text-emerald-700">Digitally Signed &bull; Serial: ${escapeHtml(app.serialId || app.id)}</p>
+            </div>
+          </div>
+          <button onclick="closeModal('mail-modal'); openCertModal('${app.id}');" class="px-3.5 py-2 rounded-xl bg-brand-navy hover:bg-brand-navyLight text-white text-xs font-bold transition">
+            Open / Print PDF
+          </button>
+        </div>
+      `;
+      openModal('mail-modal');
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      await initAdminHashes();
+      loadAllState();
+      applyInstitutionBranding();
+      updateAdminNavIndicators();
+      updateKpis();
+      switchTab('overview');
+    });
+  </script>
+</body>
+</html>
